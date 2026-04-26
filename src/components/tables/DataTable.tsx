@@ -126,7 +126,7 @@ export function DataTable<T>({
         rowValues.forEach((value) => values.add(value));
       });
 
-      map[column.key] = [...values]
+      map[column.key] = Array.from(values)
         .filter((value) => value.length > 0)
         .sort((a, b) => a.localeCompare(b))
         .map((value) => ({ value, label: value }));

@@ -50,7 +50,7 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
     const { data: profileData } = await supabase
       .from("profiles")
       .select("*")
-      .in("id", [...profileIds])
+      .in("id", Array.from(profileIds))
       .returns<Profile[]>();
 
     profiles = profileData ?? [];
