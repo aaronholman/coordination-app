@@ -1,153 +1,161 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import { createClient } from '@/lib/supabase/client';
-import { useRouter } from 'next/navigation';
-import Link from 'next/link';
-import {
-  LayoutDashboard,
-  Briefcase,
-  CheckSquare,
-  Calendar,
-  FileText,
-  UtensilsCrossed,
-  Lightbulb,
-  LogOut,
-  Menu,
-  X,
-} from 'lucide-react';
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import type { ReactNode } from "react";
 
-interface User {
-  id: string;
-  email: string;
-  user_metadata?: {
-    full_name?: string;
-  };
+import styles from "./layout.module.css";
+
+interface AppLayoutProps {
+  children: ReactNode;
 }
 
-export default function AppLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [sidebarOpen, setSidebarOpen] = useState(true);
-  const router = useRouter();
-  const supabase = createClient();
+interface NavItem {
+  href: string;
+  label: string;
+  shortLabel: string;
+  icon: ReactNode;
+}
 
-  useEffect(() => {
-    const getUser = async () => {
-      try {
-        const {
-          data: { user: authUser },
-        } = await supabase.auth.getUser();
-        setUser(authUser as User | null);
-      } catch (error) {
-        console.error('Error fetching user:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
+const coreLinks: NavItem[] = [
+  {
+    href: "/dashboard",
+    label: "Home",
+    shortLabel: "Home",
+    icon: (
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M4 11.5L12 5l8 6.5V20a1 1 0 0 1-1 1h-4.5v-5.5h-5V21H5a1 1 0 0 1-1-1v-8.5Z" />
+      </svg>
+    ),
+  },
+  {
+    href: "/projects",
+    label: "Projects",
+    shortLabel: "Projects",
+    icon: (
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M4 6h16v12H4zM9 6V4h6v2" />
+      </svg>
+    ),
+  },
+  {
+    href: "/tasks",
+    label: "Tasks",
+    shortLabel: "Tasks",
+    icon: (
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M9.5 7h9M9.5 12h9M9.5 17h9M5 7h.01M5 12h.01M5 17h.01" />
+      </svg>
+    ),
+  },
+  {
+    href: "/grocery",
+    label: "Grocery",
+    shortLabel: "Grocery",
+    icon: (
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M6 8h13l-1.2 10.2A2 2 0 0 1 15.8 20H9.2a2 2 0 0 1-2-1.8L6 8Zm2-3h7l1 3H7l1-3Z" />
+      </svg>
+    ),
+  },
+];
 
-    getUser();
-  }, [supabase]);
+const secondaryLinks: NavItem[] = [
+  {
+    href: "/documents",
+    label: "Documents",
+    shortLabel: "Docs",
+    icon: (
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M7 3h7l5 5v13H7V3Zm7 1.5V9h4.5" />
+      </svg>
+    ),
+  },
+  {
+    href: "/recipes",
+    label: "Recipes",
+    shortLabel: "Recipes",
+    icon: (
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M7 4h10v16H7zM9 8h6M9 12h6M9 16h4" />
+      </svg>
+    ),
+  },
+  {
+    href: "/recs",
+    label: "Recs",
+    shortLabel: "Recs",
+    icon: (
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M12 21s-7-4.4-7-10a4 4 0 0 1 7-2.4A4 4 0 0 1 19 11c0 5.6-7 10-7 10Z" />
+      </svg>
+    ),
+  },
+];
 
-  const handleLogout = async () => {
-    await supabase.auth.signOut();
-    router.push('/login');
-    router.refresh();
-  };
+const mobileLinks = [...coreLinks, ...secondaryLinks];
 
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="text-gray-600">Loading...</div>
-      </div>
-    );
-  }
+function isActive(pathname: string, href: string) {
+  return pathname === href || pathname.startsWith(`${href}/`);
+}
 
-  const navItems = [
-    { label: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
-    { label: 'Projects', href: '/projects', icon: Briefcase },
-    { label: 'Tasks', href: '/tasks', icon: CheckSquare },
-    { label: 'Calendar', href: '/calendar', icon: Calendar },
-    { label: 'Documents', href: '/documents', icon: FileText },
-    { label: 'Recipes', href: '/recipes', icon: UtensilsCrossed },
-    { label: 'Recommendations', href: '/recommendations', icon: Lightbulb },
-  ];
+function NavLink({ item, pathname }: { item: NavItem; pathname: string }) {
+  const active = isActive(pathname, item.href);
 
   return (
-    <div className="flex h-full">
-      {/* Sidebar */}
-      <aside
-        className={`fixed md:sticky top-0 left-0 h-full transition-all duration-300 ${
-          sidebarOpen ? 'w-64' : 'w-0'
-        } bg-gray-900 text-gray-100 overflow-hidden flex flex-col z-50 md:z-0`}
-      >
-        <div className="p-6 border-b border-gray-800">
-          <h1 className="text-xl font-bold text-white">The Holmatrix</h1>
+    <Link
+      href={item.href}
+      className={`${styles.navLink} ${active ? styles.navLinkActive : ""}`}
+    >
+      {item.label}
+    </Link>
+  );
+}
+
+function MobileNavLink({ item, pathname }: { item: NavItem; pathname: string }) {
+  const active = isActive(pathname, item.href);
+
+  return (
+    <Link
+      href={item.href}
+      className={`${styles.mobileLink} ${active ? styles.mobileLinkActive : ""}`}
+    >
+      <span className={styles.mobileIcon}>{item.icon}</span>
+      <span className={styles.mobileLabel}>{item.shortLabel}</span>
+    </Link>
+  );
+}
+
+export default function AppLayout({ children }: AppLayoutProps) {
+  const pathname = usePathname();
+
+  return (
+    <div className={styles.shell}>
+      <header className={styles.topNav}>
+        <div className={styles.navInner}>
+          <Link href="/dashboard" className={styles.logo}>
+            holmatrix
+          </Link>
+
+          <nav className={styles.desktopNav}>
+            {coreLinks.map((item) => (
+              <NavLink key={item.href} item={item} pathname={pathname} />
+            ))}
+            <span className={styles.divider} aria-hidden="true" />
+            {secondaryLinks.map((item) => (
+              <NavLink key={item.href} item={item} pathname={pathname} />
+            ))}
+          </nav>
         </div>
+      </header>
 
-        <nav className="flex-1 overflow-y-auto py-6 px-4 space-y-2">
-          {navItems.map((item) => {
-            const Icon = item.icon;
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-gray-800 hover:text-white transition-colors group"
-              >
-                <Icon size={20} className="text-gray-400 group-hover:text-white" />
-                <span>{item.label}</span>
-              </Link>
-            );
-          })}
-        </nav>
+      <main className={styles.main}>{children}</main>
 
-        <div className="p-4 border-t border-gray-800 space-y-4">
-          <div className="text-sm text-gray-400">
-            <p className="font-medium text-gray-300">
-              {user?.user_metadata?.full_name || user?.email || 'User'}
-            </p>
-            <p className="text-xs text-gray-500">{user?.email}</p>
-          </div>
-          <button
-            onClick={handleLogout}
-            className="w-full flex items-center gap-2 px-4 py-2 rounded-lg bg-gray-800 hover:bg-gray-700 text-gray-300 hover:text-white transition-colors text-sm font-medium"
-          >
-            <LogOut size={16} />
-            Sign Out
-          </button>
-        </div>
-      </aside>
-
-      {/* Main Content */}
-      <div className="flex-1 flex flex-col w-full md:w-auto">
-        {/* Mobile Header */}
-        <div className="md:hidden bg-white border-b border-gray-200 p-4 flex items-center justify-between sticky top-0 z-40">
-          <h1 className="text-lg font-semibold text-gray-900">The Holmatrix</h1>
-          <button
-            onClick={() => setSidebarOpen(!sidebarOpen)}
-            className="text-gray-600 hover:text-gray-900"
-          >
-            {sidebarOpen ? <X size={24} /> : <Menu size={24} />}
-          </button>
-        </div>
-
-        {/* Content Area */}
-        <main className="flex-1 bg-white overflow-y-auto">
-          <div className="p-8">{children}</div>
-        </main>
-      </div>
-
-      {/* Mobile Sidebar Overlay */}
-      {sidebarOpen && (
-        <div
-          className="fixed md:hidden inset-0 bg-black/50 z-40 top-14"
-          onClick={() => setSidebarOpen(false)}
-        />
-      )}
+      <nav className={styles.bottomNav} aria-label="Mobile navigation">
+        {mobileLinks.map((item) => (
+          <MobileNavLink key={item.href} item={item} pathname={pathname} />
+        ))}
+      </nav>
     </div>
   );
 }

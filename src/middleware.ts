@@ -1,19 +1,37 @@
-import { type NextRequest } from 'next/server'
-import { updateSession } from '@/lib/supabase/middleware'
+import { NextResponse, type NextRequest } from "next/server";
+
+import { updateSession } from "./lib/supabase/middleware";
+
+const PUBLIC_PATHS = ["/login", "/auth/callback"];
+
+function isPublicPath(pathname: string) {
+  return PUBLIC_PATHS.some(
+    (path) => pathname === path || pathname.startsWith(`${path}/`),
+  );
+}
 
 export async function middleware(request: NextRequest) {
-  return await updateSession(request)
+  const { response, user } = await updateSession(request);
+  const { pathname } = request.nextUrl;
+
+  const isAuthenticated = Boolean(user);
+  const isPublic = isPublicPath(pathname);
+
+  if (!isAuthenticated && !isPublic) {
+    const redirectUrl = request.nextUrl.clone();
+    redirectUrl.pathname = "/login";
+    return NextResponse.redirect(redirectUrl);
+  }
+
+  if (isAuthenticated && pathname === "/login") {
+    const redirectUrl = request.nextUrl.clone();
+    redirectUrl.pathname = "/dashboard";
+    return NextResponse.redirect(redirectUrl);
+  }
+
+  return response;
 }
 
 export const config = {
-  matcher: [
-    /*
-     * Match all request paths except for the ones starting with:
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - favicon.ico (favicon file)
-     * - public folder
-     */
-    '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
-  ],
-}
+  matcher: ["/((?!_next/static|_next/image|favicon.ico).*)"],
+};

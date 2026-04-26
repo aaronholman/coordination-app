@@ -1,0 +1,186 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--hm-space-lg);
+}
+
+.greetingWrap {
+  display: flex;
+  flex-direction: column;
+  gap: var(--hm-space-xs);
+}
+
+.greeting {
+  color: var(--hm-color-forest);
+  font-family: var(--hm-font-heading);
+  font-size: var(--hm-text-2xl);
+  font-weight: var(--hm-weight-regular);
+}
+
+.subGreeting {
+  color: var(--hm-color-text-muted);
+  font-size: var(--hm-text-base);
+  font-weight: var(--hm-weight-regular);
+}
+
+.quickActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--hm-space-sm);
+}
+
+.quickAction {
+  min-height: 40px;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--hm-space-xs);
+  border: 1px solid var(--hm-color-border);
+  border-radius: var(--hm-radius-md);
+  background: var(--hm-color-warm-gray);
+  color: var(--hm-color-forest);
+  font-size: var(--hm-text-sm);
+  font-weight: var(--hm-weight-medium);
+  padding: 0 var(--hm-space-md);
+}
+
+.quickActionIcon {
+  width: 16px;
+  height: 16px;
+  display: inline-flex;
+}
+
+.quickActionIcon svg {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.widgetGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--hm-space-lg);
+}
+
+.widget {
+  display: flex;
+  flex-direction: column;
+  gap: var(--hm-space-sm);
+}
+
+.widgetTitle {
+  color: var(--hm-color-forest);
+  font-family: var(--hm-font-heading);
+  font-size: var(--hm-text-lg);
+  font-weight: var(--hm-weight-regular);
+}
+
+.taskList,
+.groceryList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--hm-space-xs);
+}
+
+.taskRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--hm-space-sm);
+}
+
+.taskMain {
+  min-width: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--hm-space-xs);
+}
+
+.priorityDot {
+  width: 8px;
+  height: 8px;
+  border-radius: var(--hm-radius-pill);
+  flex-shrink: 0;
+}
+
+.priorityLow {
+  background: var(--hm-color-border-hover);
+}
+
+.priorityMedium {
+  background: var(--hm-color-info);
+}
+
+.priorityHigh {
+  background: var(--hm-color-warning);
+}
+
+.priorityUrgent {
+  background: var(--hm-color-danger);
+}
+
+.taskLink {
+  color: var(--hm-color-forest);
+  font-size: var(--hm-text-sm);
+  font-weight: var(--hm-weight-medium);
+}
+
+.taskDue {
+  color: var(--hm-color-text-muted);
+  font-size: var(--hm-text-xs);
+  white-space: nowrap;
+}
+
+.groceryRow {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--hm-space-sm);
+}
+
+.groceryName {
+  color: var(--hm-color-forest);
+  font-size: var(--hm-text-sm);
+  font-weight: var(--hm-weight-medium);
+}
+
+.groceryCategory {
+  color: var(--hm-color-text-muted);
+  font-size: var(--hm-text-xs);
+}
+
+.viewAll {
+  margin-top: var(--hm-space-xs);
+  color: var(--hm-color-sage);
+  font-size: var(--hm-text-sm);
+  font-weight: var(--hm-weight-medium);
+}
+
+.emptyText {
+  color: var(--hm-color-text-muted);
+  font-size: var(--hm-text-sm);
+}
+
+.calendarWidget {
+  gap: var(--hm-space-md);
+}
+
+.calendarFrame {
+  border-radius: var(--hm-radius-md);
+  overflow: hidden;
+}
+
+.calendarIframe {
+  width: 100%;
+  min-height: 500px;
+  border: 0;
+}
+
+@media (max-width: 767px) {
+  .calendarIframe {
+    min-height: 350px;
+  }
+}

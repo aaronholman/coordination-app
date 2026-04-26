@@ -1,0 +1,100 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--hm-space-md);
+}
+
+.headerControls {
+  display: flex;
+  align-items: center;
+  gap: var(--hm-space-sm);
+}
+
+.searchInput {
+  width: 260px;
+  height: 32px;
+}
+
+.newButton {
+  width: auto;
+  height: 32px;
+  padding: 0 var(--hm-space-md);
+}
+
+.titleCell {
+  color: var(--hm-color-forest);
+  font-weight: var(--hm-weight-medium);
+}
+
+.pill {
+  display: inline-flex;
+  border-radius: var(--hm-radius-pill);
+  font-size: var(--hm-text-xs);
+  font-weight: var(--hm-weight-medium);
+  padding: 2px var(--hm-space-sm);
+}
+
+.typeShow {
+  background: var(--hm-color-purple-light);
+  color: var(--hm-color-purple-dark);
+}
+
+.typeMovie {
+  background: var(--hm-color-info-light);
+  color: var(--hm-color-info);
+}
+
+.typePodcast {
+  background: var(--hm-color-warning-light);
+  color: var(--hm-color-warning);
+}
+
+.typeBook {
+  background: var(--hm-color-sage-light);
+  color: var(--hm-color-sage-dark);
+}
+
+.statusNotYet {
+  background: var(--hm-color-warm-gray);
+  color: var(--hm-color-text-muted);
+}
+
+.statusWatching {
+  background: var(--hm-color-rose-light);
+  color: var(--hm-color-rose-dark);
+}
+
+.statusWatched {
+  background: var(--hm-color-sage-light);
+  color: var(--hm-color-sage-dark);
+}
+
+.avatarCell {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--hm-space-sm);
+}
+
+.avatar {
+  width: 24px;
+  height: 24px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--hm-radius-pill);
+  background: var(--hm-color-warm-gray);
+  color: var(--hm-color-forest);
+  font-size: var(--hm-text-xs);
+  font-weight: var(--hm-weight-medium);
+}
+
+@media (max-width: 768px) {
+  .headerControls {
+    width: 100%;
+  }
+
+  .searchInput {
+    width: auto;
+    flex: 1;
+  }
+}

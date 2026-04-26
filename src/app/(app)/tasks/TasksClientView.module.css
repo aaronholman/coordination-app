@@ -1,0 +1,108 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--hm-space-md);
+}
+
+.headerControls {
+  display: flex;
+  align-items: center;
+  gap: var(--hm-space-sm);
+}
+
+.searchInput {
+  width: 220px;
+  height: 32px;
+}
+
+.newButton {
+  width: auto;
+  height: 32px;
+  padding: 0 var(--hm-space-md);
+}
+
+.taskLink {
+  color: var(--hm-color-forest);
+  font-weight: var(--hm-weight-medium);
+}
+
+.avatarCell {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--hm-space-sm);
+}
+
+.avatar {
+  width: 24px;
+  height: 24px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--hm-radius-pill);
+  background: var(--hm-color-warm-gray);
+  color: var(--hm-color-forest);
+  font-size: var(--hm-text-xs);
+  font-weight: var(--hm-weight-medium);
+}
+
+.statusCell,
+.priorityCell {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--hm-space-xs);
+}
+
+.statusDot,
+.priorityDot {
+  width: 8px;
+  height: 8px;
+  border-radius: var(--hm-radius-pill);
+}
+
+.statusNotStarted {
+  background: var(--hm-color-border-hover);
+}
+
+.statusInProgress {
+  background: var(--hm-color-warning);
+}
+
+.statusDone {
+  background: var(--hm-color-success);
+}
+
+.priorityLow {
+  background: var(--hm-color-border-hover);
+}
+
+.priorityMedium {
+  background: var(--hm-color-info);
+}
+
+.priorityHigh {
+  background: var(--hm-color-warning);
+}
+
+.priorityUrgent {
+  background: var(--hm-color-danger);
+}
+
+.completedRow :global(td) {
+  color: var(--hm-color-text-muted);
+}
+
+.completedText {
+  color: var(--hm-color-text-muted);
+  text-decoration: line-through;
+}
+
+@media (max-width: 768px) {
+  .headerControls {
+    width: 100%;
+  }
+
+  .searchInput {
+    width: auto;
+    flex: 1;
+  }
+}

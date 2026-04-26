@@ -1,0 +1,191 @@
+# The Holmatrix — Cursor Rules
+# This file tells Cursor AI about the project conventions.
+# Place it at the root of the repo: /coordination-app/.cursorrules
+
+## Project Overview
+
+The Holmatrix is a personal/family organization app at theholmatrix.com.
+It is a multi-tenant app — all data is scoped by `tenant_id`.
+Two core users: Aaron (aaron@thehealthcolab.com) and Michaela (mjkerrissey@gmail.com).
+External collaborators can be invited to specific resources via magic link sharing.
+
+## Tech Stack
+
+- **Framework:** Next.js 14+ with App Router (NOT Pages Router)
+- **Language:** TypeScript (strict mode)
+- **Styling:** CSS custom properties from `holmatrix-theme.css` — NO Tailwind
+- **Backend:** Supabase (Postgres, Auth, RLS, Realtime, Storage)
+- **Email:** Resend (for notifications, share invitations, digests)
+- **Hosting:** Vercel
+- **Fonts:** Google Fonts — DM Serif Display (headings) + DM Sans (body)
+
+## Brand System — "Soft Botanica"
+
+All colors, typography, spacing, and component tokens are defined in `src/styles/holmatrix-theme.css` as CSS custom properties prefixed with `--hm-`.
+
+### Colors (NEVER hardcode — always use variables)
+- Primary (sage green): `var(--hm-color-sage)` — buttons, links, active states
+- Accent (dusty rose): `var(--hm-color-rose)` — tags, highlights, secondary actions
+- Background: `var(--hm-color-cream)` — page background
+- Surface: `var(--hm-color-warm-gray)` — cards, sidebar
+- Text: `var(--hm-color-forest)` — primary text
+- Muted text: `var(--hm-color-text-muted)` — secondary/helper text
+- Border: `var(--hm-color-border)` — all borders
+- Status: `var(--hm-color-success)`, `var(--hm-color-warning)`, `var(--hm-color-danger)`, `var(--hm-color-info)`
+
+### Typography
+- Headings/logo: `var(--hm-font-heading)` — DM Serif Display
+- Body/UI: `var(--hm-font-body)` — DM Sans 400 + 500
+- Only two weights: 400 (regular) and 500 (medium). Never use 600 or 700.
+
+### Spacing
+- Use the `--hm-space-*` scale: xs (4px), sm (8px), md (16px), lg (24px), xl (32px), 2xl (48px)
+
+### Component Classes
+The theme file provides these helper classes — use them instead of writing custom styles:
+- `.hm-card` — elevated surface (white bg, border, rounded corners)
+- `.hm-input` — text input fields
+- `.hm-btn-primary` — primary action button (sage green)
+- `.hm-btn-text` — text/link button (dusty rose)
+- `.hm-label` — form labels
+
+## File Structure
+
+```
+src/
+├── app/                      # Next.js App Router
+│   ├── (app)/                # Authenticated layout group
+│   │   ├── layout.tsx        # App shell: nav bar + main content area
+│   │   ├── dashboard/
+│   │   │   └── page.tsx
+│   │   ├── projects/
+│   │   │   ├── page.tsx      # Projects grid (card layout)
+│   │   │   └── [id]/
+│   │   │       └── page.tsx  # Project detail (tasks + docs tables)
+│   │   ├── tasks/
+│   │   │   ├── page.tsx      # Global tasks table
+│   │   │   └── [id]/
+│   │   │       └── page.tsx  # Task detail (metadata + markdown editor)
+│   │   ├── grocery/
+│   │   │   └── page.tsx
+│   │   ├── documents/
+│   │   │   └── page.tsx      # Global documents table
+│   │   ├── recipes/
+│   │   │   └── page.tsx
+│   │   └── recs/
+│   │       └── page.tsx
+│   ├── login/
+│   │   └── page.tsx          # Login page (email/password + magic link toggle)
+│   ├── auth/
+│   │   └── callback/
+│   │       └── route.ts      # Supabase auth callback handler
+│   ├── api/                  # API routes (if needed)
+│   ├── layout.tsx            # Root layout (fonts, global CSS)
+│   └── globals.css
+├── components/
+│   ├── ui/                   # Reusable UI primitives
+│   │   ├── Button.tsx
+│   │   ├── Input.tsx
+│   │   ├── Card.tsx
+│   │   ├── Badge.tsx
+│   │   ├── Avatar.tsx
+│   │   └── Modal.tsx
+│   ├── tables/               # Table components with column filtering
+│   │   ├── DataTable.tsx     # Base table with Excel-style column headers
+│   │   ├── ColumnHeader.tsx  # Sortable/filterable column header dropdown
+│   │   └── SearchBar.tsx
+│   ├── layout/
+│   │   ├── NavBar.tsx        # Horizontal top nav (bottom tab bar on mobile)
+│   │   └── PageHeader.tsx    # Page title + action buttons
+│   ├── grocery/              # Grocery-specific components
+│   ├── markdown/             # Markdown editor with hover cheat sheet
+│   └── sharing/              # Share dialog and magic link UI
+├── lib/
+│   ├── supabase/
+│   │   ├── client.ts         # Browser Supabase client
+│   │   ├── server.ts         # Server-side Supabase client
+│   │   └── middleware.ts     # Auth middleware
+│   ├── types/
+│   │   └── database.ts       # TypeScript types matching Supabase schema
+│   └── utils/
+│       ├── dates.ts
+│       └── formatting.ts
+├── styles/
+│   └── holmatrix-theme.css   # Brand design tokens
+└── middleware.ts              # Next.js middleware (auth redirect)
+```
+
+## Coding Conventions
+
+### General
+- Use `"use client"` directive only on components that need browser APIs or hooks
+- Prefer Server Components by default — only make components client-side when they need interactivity
+- Use named exports for components, default exports only for page.tsx files
+- All database queries go through Supabase client — never raw SQL in components
+- Every query must include `tenant_id` filtering (RLS handles this, but be explicit)
+
+### Component Patterns
+- Components use CSS Modules (`.module.css`) that reference `--hm-*` variables
+- One component per file, file name matches component name (PascalCase)
+- Props interfaces defined in the same file, named `{ComponentName}Props`
+- Destructure props in function signature
+
+### Supabase Patterns
+```typescript
+// Always use the server client in Server Components
+import { createServerClient } from '@/lib/supabase/server'
+
+// Always use the browser client in Client Components
+import { createBrowserClient } from '@/lib/supabase/client'
+
+// Queries always filter by tenant — RLS enforces this but be explicit
+const { data } = await supabase
+  .from('tasks')
+  .select('*, projects(name)')
+  .eq('tenant_id', tenantId)
+  .order('created_at', { ascending: false })
+```
+
+### Table / Column Filter Pattern
+All table views (Tasks, Documents, Recipes, Recs) share the same UX:
+- Clickable column headers open a dropdown with sort options + filter checkboxes
+- Excel-style interaction — familiar to non-technical users
+- Search bar + "New" button in the page header
+- Rows are clickable to navigate to detail page
+
+### Mobile Responsiveness
+- Primary usage is MOBILE — design mobile-first
+- Navigation becomes bottom tab bar on screens < 768px
+- Tables collapse non-essential columns on mobile:
+  - Tasks: show task name + status dot + assignee avatar. Hide due date, priority, project.
+  - Documents: show name + category badge. Hide project, date, author.
+  - Recipes/Recs: show name + type badge. Hide source, date, author.
+- Collapsed data is visible when user taps a row (detail view)
+- Grocery list is already mobile-optimized (checklist format)
+
+### Markdown Editor
+- Use Tiptap or Milkdown library
+- NO toolbar — clean editing surface
+- "Use markdown" text hint that shows a hover cheat sheet (20 common commands)
+- Used in task detail pages for the description field
+
+## Authentication Flow
+
+1. Login page shows email/password form with magic link toggle
+2. Email/password = core family users (Aaron, Michaela)
+3. Magic link = approved external collaborators
+4. Supabase Auth handles both flows
+5. On signup, a trigger auto-creates the profile row with tenant_id
+6. Middleware redirects unauthenticated users to /login
+7. After login, redirect to /dashboard
+
+## Do NOT
+
+- Do not use Tailwind CSS — this project uses CSS custom properties
+- Do not hardcode colors — always use `var(--hm-*)` tokens
+- Do not use font-weight 600 or 700 — only 400 and 500
+- Do not use the Pages Router — this is App Router only
+- Do not install shadcn/ui — we have our own component system
+- Do not put `"use client"` on components that don't need it
+- Do not skip TypeScript types — everything should be typed
+- Do not create API routes when a Server Component can do the job

@@ -1,0 +1,95 @@
+.wrap {
+  position: relative;
+}
+
+.trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--hm-space-xs);
+  border: none;
+  background: transparent;
+  color: var(--hm-color-forest);
+  cursor: pointer;
+  font-family: var(--hm-font-body);
+  font-size: var(--hm-text-sm);
+  font-weight: var(--hm-weight-medium);
+  padding: 0;
+}
+
+.arrow {
+  color: var(--hm-color-text-muted);
+  font-size: var(--hm-text-xs);
+}
+
+.menu {
+  position: absolute;
+  top: calc(100% + var(--hm-space-xs));
+  left: 0;
+  z-index: 20;
+  min-width: 188px;
+  border: 0.5px solid var(--hm-color-border);
+  border-radius: var(--hm-radius-md);
+  background: var(--hm-color-white);
+  box-shadow: 0 6px 18px rgba(45, 58, 51, 0.1);
+  padding: var(--hm-space-xs);
+}
+
+.menuItem {
+  width: 100%;
+  text-align: left;
+  border: none;
+  border-radius: var(--hm-radius-sm);
+  background: transparent;
+  color: var(--hm-color-forest);
+  cursor: pointer;
+  font-family: var(--hm-font-body);
+  font-size: var(--hm-text-sm);
+  font-weight: var(--hm-weight-regular);
+  padding: var(--hm-space-xs) var(--hm-space-sm);
+}
+
+.menuItem:hover,
+.menuItemActive {
+  background: var(--hm-color-sage-light);
+}
+
+.divider {
+  border-top: 0.5px solid var(--hm-color-border);
+  margin: var(--hm-space-xs) 0;
+}
+
+.filterItem {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: var(--hm-space-sm);
+  border: none;
+  border-radius: var(--hm-radius-sm);
+  background: transparent;
+  cursor: pointer;
+  padding: var(--hm-space-xs) var(--hm-space-sm);
+}
+
+.filterItem:hover {
+  background: var(--hm-color-warm-gray);
+}
+
+.checkbox {
+  width: 14px;
+  height: 14px;
+  border: 0.5px solid var(--hm-color-border-hover);
+  border-radius: var(--hm-radius-sm);
+  background: var(--hm-color-white);
+}
+
+.checkboxChecked {
+  border-color: var(--hm-color-sage);
+  background: var(--hm-color-sage-light);
+}
+
+.filterLabel {
+  color: var(--hm-color-forest);
+  font-family: var(--hm-font-body);
+  font-size: var(--hm-text-sm);
+  font-weight: var(--hm-weight-regular);
+}

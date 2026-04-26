@@ -1,0 +1,18 @@
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--hm-space-md);
+}
+
+.title {
+  color: var(--hm-color-forest);
+  font-family: var(--hm-font-heading);
+  font-size: var(--hm-text-2xl);
+  font-weight: var(--hm-weight-regular);
+}
+
+.action {
+  display: inline-flex;
+  align-items: center;
+}

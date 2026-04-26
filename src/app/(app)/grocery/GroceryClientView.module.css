@@ -1,0 +1,276 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--hm-space-md);
+  padding-bottom: calc(var(--hm-space-2xl) + 84px);
+}
+
+.storePills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--hm-space-sm);
+}
+
+.storePill {
+  border: 1px solid var(--hm-color-border);
+  border-radius: var(--hm-radius-pill);
+  background: var(--hm-color-warm-gray);
+  color: var(--hm-color-forest);
+  min-height: 44px;
+  padding: 0 var(--hm-space-md);
+  font-size: var(--hm-text-sm);
+  font-weight: var(--hm-weight-medium);
+}
+
+.storePillActive {
+  border-color: var(--hm-color-sage);
+  background: var(--hm-color-sage);
+  color: var(--hm-color-white);
+}
+
+.quickAdd {
+  display: flex;
+  gap: var(--hm-space-sm);
+}
+
+.quickAddInput {
+  height: 44px;
+}
+
+.quickAddButton {
+  width: 44px;
+  height: 44px;
+  padding: 0;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--hm-space-md);
+}
+
+.categorySection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--hm-space-xs);
+}
+
+.categoryHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--hm-space-sm);
+  color: var(--hm-color-text-muted);
+  font-size: var(--hm-text-xs);
+  font-weight: var(--hm-weight-medium);
+  letter-spacing: 0.08em;
+}
+
+.categoryDivider {
+  flex: 1;
+  height: 0.5px;
+  background: var(--hm-color-border);
+}
+
+.itemRow {
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--hm-space-sm);
+  border-bottom: 0.5px solid var(--hm-color-border);
+  padding: var(--hm-space-xs) 0;
+  animation: rowIn 200ms ease-out;
+}
+
+.mainTapRow {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--hm-space-sm);
+  flex: 1;
+}
+
+.itemName {
+  color: var(--hm-color-forest);
+  font-size: var(--hm-text-base);
+}
+
+.rowMeta {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--hm-space-xs);
+}
+
+.aisleWrap {
+  position: relative;
+  display: inline-flex;
+}
+
+.aisleSizer {
+  position: absolute;
+  visibility: hidden;
+  white-space: pre;
+  font-size: var(--hm-text-xs);
+  font-weight: var(--hm-weight-medium);
+  padding: 0 var(--hm-space-xs);
+}
+
+.aisleInput {
+  border: 1px solid var(--hm-color-border);
+  border-radius: var(--hm-radius-pill);
+  background: var(--hm-color-warm-gray);
+  color: var(--hm-color-text-muted);
+  height: 26px;
+  min-width: 42px;
+  max-width: 120px;
+  font-size: var(--hm-text-xs);
+  font-weight: var(--hm-weight-medium);
+  padding: 0 var(--hm-space-xs);
+  transition: border-color 200ms ease-out, box-shadow 200ms ease-out;
+}
+
+.aisleInputSaved {
+  border-color: var(--hm-color-success);
+  box-shadow: 0 0 0 2px var(--hm-color-sage-light);
+}
+
+.notesBadge {
+  border: none;
+  border-radius: var(--hm-radius-pill);
+  background: var(--hm-color-rose-light);
+  color: var(--hm-color-rose-dark);
+  width: 22px;
+  height: 22px;
+  font-size: var(--hm-text-xs);
+  font-weight: var(--hm-weight-medium);
+}
+
+.deleteButton {
+  border: none;
+  background: transparent;
+  color: var(--hm-color-text-muted);
+  display: none;
+}
+
+.itemRow:hover .deleteButton {
+  display: inline-block;
+}
+
+.checkedSection {
+  margin-top: var(--hm-space-sm);
+  border-top: 0.5px solid var(--hm-color-border);
+  padding-top: var(--hm-space-sm);
+}
+
+.checkedHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--hm-space-xs);
+}
+
+.checkedTitle {
+  color: var(--hm-color-text-muted);
+  font-size: var(--hm-text-sm);
+  font-weight: var(--hm-weight-medium);
+}
+
+.checkedRow {
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  gap: var(--hm-space-sm);
+  animation: rowIn 200ms ease-out;
+}
+
+.checkedName {
+  color: var(--hm-color-text-muted);
+  text-decoration: line-through;
+}
+
+.inlineNotes {
+  margin-left: calc(var(--hm-space-md) + 20px);
+  margin-top: var(--hm-space-xs);
+  border-top: 0.5px solid var(--hm-color-border);
+  border-radius: var(--hm-radius-md);
+  background: var(--hm-color-warm-gray);
+  padding: var(--hm-space-sm);
+  animation: rowIn 200ms ease-out;
+}
+
+.inlineNotesHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.inlineNotesTitle {
+  color: var(--hm-color-forest);
+  font-size: var(--hm-text-sm);
+  font-weight: var(--hm-weight-medium);
+}
+
+.inlineNotesClose {
+  border: none;
+  background: transparent;
+  color: var(--hm-color-sage);
+}
+
+.inlineNotesList {
+  max-height: 200px;
+  overflow-y: auto;
+  margin-top: var(--hm-space-sm);
+}
+
+.inlineNoteItem {
+  border-bottom: 0.5px solid var(--hm-color-border);
+  padding: var(--hm-space-xs) 0;
+}
+
+.noteText {
+  font-size: var(--hm-text-sm);
+}
+
+.noteMeta {
+  color: var(--hm-color-text-muted);
+  font-size: var(--hm-text-xs);
+}
+
+.inlineNoteInputRow {
+  display: flex;
+  align-items: center;
+  gap: var(--hm-space-sm);
+  margin-top: var(--hm-space-sm);
+}
+
+.emptyText {
+  color: var(--hm-color-text-muted);
+  font-size: var(--hm-text-sm);
+}
+
+.noteInput {
+  height: 40px;
+}
+
+.noteAddButton {
+  width: auto;
+  height: 40px;
+  padding: 0 var(--hm-space-md);
+}
+
+@media (max-width: 768px) {
+  .inlineNotes {
+    margin-left: calc(var(--hm-space-sm) + 20px);
+  }
+}
+
+@keyframes rowIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

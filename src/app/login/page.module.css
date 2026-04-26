@@ -1,0 +1,53 @@
+.wrapper {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--hm-color-cream);
+  padding: var(--hm-space-lg);
+}
+
+.panel {
+  width: 100%;
+  max-width: 420px;
+}
+
+.title {
+  color: var(--hm-color-forest);
+  font-family: var(--hm-font-heading);
+  font-size: 2.5rem;
+  font-weight: 400;
+  text-align: center;
+  margin-bottom: var(--hm-space-lg);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--hm-space-sm);
+}
+
+.label {
+  color: var(--hm-color-text-muted);
+  font-family: var(--hm-font-body);
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.submit {
+  margin-top: var(--hm-space-sm);
+  min-height: 44px;
+}
+
+.toggle {
+  margin-top: var(--hm-space-sm);
+  text-align: left;
+}
+
+.message {
+  margin-top: var(--hm-space-sm);
+  color: var(--hm-color-forest);
+  font-family: var(--hm-font-body);
+  font-size: 0.9rem;
+  font-weight: 400;
+}

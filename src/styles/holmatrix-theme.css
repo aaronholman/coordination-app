@@ -1,0 +1,211 @@
+/*
+ * Holmatrix — Soft Botanica Brand System
+ *
+ * Usage: Import this file at the top of your global CSS or layout.
+ * Reference any value with var(--hm-color-sage), var(--hm-font-heading), etc.
+ *
+ * Fonts: Load from Google Fonts in your <head> or _app layout:
+ * https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500&display=swap
+ */
+
+:root {
+  /* -------------------------
+     Colors
+     ------------------------- */
+
+  /* Primary — sage green (buttons, links, active states) */
+  --hm-color-sage: #5B8A72;
+  --hm-color-sage-light: #EDF4F0;
+  --hm-color-sage-dark: #3D5F4E;
+
+  /* Accent — dusty rose (tags, highlights, secondary actions) */
+  --hm-color-rose: #C9A0A0;
+  --hm-color-rose-light: #F5EAEA;
+  --hm-color-rose-dark: #8C6464;
+
+  /* Backgrounds */
+  --hm-color-cream: #FDFBF8;       /* page background */
+  --hm-color-warm-gray: #F0EBE3;   /* cards, surfaces, sidebar */
+  --hm-color-white: #FFFFFF;        /* elevated cards, inputs */
+
+  /* Text */
+  --hm-color-forest: #2D3A33;      /* primary text */
+  --hm-color-text-muted: #6B7B71;  /* secondary / helper text */
+
+  /* Borders */
+  --hm-color-border: #E8E2D8;
+  --hm-color-border-hover: #D4CCC0;
+
+  /* Status colors (for tasks, alerts, etc.) */
+  --hm-color-success: #5B8A72;     /* same as sage */
+  --hm-color-warning: #D4A853;
+  --hm-color-danger: #C27272;
+  --hm-color-info: #6B8DAE;
+  --hm-color-purple-light: #EDEAF5;
+  --hm-color-purple-dark: #5A4E87;
+  --hm-color-info-light: #EAF2F9;
+  --hm-color-warning-light: #F9F1DF;
+
+  /* -------------------------
+     Typography
+     ------------------------- */
+
+  /* Headings, logo, page titles */
+  --hm-font-heading: 'DM Serif Display', Georgia, serif;
+
+  /* Body text, labels, buttons, UI */
+  --hm-font-body: 'DM Sans', system-ui, sans-serif;
+
+  /* Code blocks, if needed */
+  --hm-font-mono: 'DM Mono', 'Fira Code', monospace;
+
+  /* Sizes */
+  --hm-text-xs: 12px;
+  --hm-text-sm: 13px;
+  --hm-text-base: 15px;
+  --hm-text-lg: 18px;
+  --hm-text-xl: 22px;
+  --hm-text-2xl: 28px;
+  --hm-text-logo: 32px;
+
+  /* Weights (DM Sans only supports 400 and 500) */
+  --hm-weight-regular: 400;
+  --hm-weight-medium: 500;
+
+  /* -------------------------
+     Spacing
+     ------------------------- */
+  --hm-space-xs: 4px;
+  --hm-space-sm: 8px;
+  --hm-space-md: 16px;
+  --hm-space-lg: 24px;
+  --hm-space-xl: 32px;
+  --hm-space-2xl: 48px;
+
+  /* -------------------------
+     Borders & Radius
+     ------------------------- */
+  --hm-radius-sm: 6px;
+  --hm-radius-md: 8px;
+  --hm-radius-lg: 12px;
+  --hm-radius-pill: 999px;
+  --hm-border: 0.5px solid var(--hm-color-border);
+
+  /* -------------------------
+     Transitions
+     ------------------------- */
+  --hm-transition: 150ms ease;
+}
+
+/* -------------------------
+   Base Styles
+   ------------------------- */
+
+body {
+  font-family: var(--hm-font-body);
+  font-size: var(--hm-text-base);
+  font-weight: var(--hm-weight-regular);
+  color: var(--hm-color-forest);
+  background-color: var(--hm-color-cream);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3 {
+  font-family: var(--hm-font-heading);
+  font-weight: var(--hm-weight-regular);
+  color: var(--hm-color-forest);
+  line-height: 1.3;
+}
+
+h1 { font-size: var(--hm-text-2xl); }
+h2 { font-size: var(--hm-text-xl); }
+h3 { font-size: var(--hm-text-lg); }
+
+a {
+  color: var(--hm-color-sage);
+  text-decoration: none;
+  transition: color var(--hm-transition);
+}
+
+a:hover {
+  color: var(--hm-color-sage-dark);
+}
+
+/* -------------------------
+   Component Helpers
+   ------------------------- */
+
+/* Card — elevated surface */
+.hm-card {
+  background: var(--hm-color-white);
+  border: var(--hm-border);
+  border-radius: var(--hm-radius-lg);
+  padding: var(--hm-space-lg);
+}
+
+/* Input fields */
+.hm-input {
+  width: 100%;
+  height: 40px;
+  padding: 0 12px;
+  font-family: var(--hm-font-body);
+  font-size: var(--hm-text-sm);
+  color: var(--hm-color-forest);
+  background: var(--hm-color-cream);
+  border: 1px solid var(--hm-color-border);
+  border-radius: var(--hm-radius-md);
+  outline: none;
+  transition: border-color var(--hm-transition);
+  box-sizing: border-box;
+}
+
+.hm-input:focus {
+  border-color: var(--hm-color-sage);
+}
+
+.hm-input::placeholder {
+  color: var(--hm-color-text-muted);
+}
+
+/* Primary button */
+.hm-btn-primary {
+  width: 100%;
+  height: 42px;
+  font-family: var(--hm-font-body);
+  font-size: 14px;
+  font-weight: var(--hm-weight-medium);
+  color: #FFFFFF;
+  background: var(--hm-color-sage);
+  border: none;
+  border-radius: var(--hm-radius-md);
+  cursor: pointer;
+  transition: background var(--hm-transition);
+}
+
+.hm-btn-primary:hover {
+  background: var(--hm-color-sage-dark);
+}
+
+/* Secondary / text button */
+.hm-btn-text {
+  font-family: var(--hm-font-body);
+  font-size: var(--hm-text-xs);
+  color: var(--hm-color-rose);
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: color var(--hm-transition);
+}
+
+.hm-btn-text:hover {
+  color: var(--hm-color-rose-dark);
+}
+
+/* Label */
+.hm-label {
+  display: block;
+  font-size: var(--hm-text-sm);
+  color: var(--hm-color-forest);
+  margin-bottom: 6px;
+}

@@ -1,0 +1,131 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--hm-space-lg);
+}
+
+.backLink {
+  color: var(--hm-color-sage);
+  font-size: var(--hm-text-sm);
+  font-weight: var(--hm-weight-medium);
+}
+
+.titleWrap {
+  display: flex;
+  align-items: center;
+}
+
+.title {
+  color: var(--hm-color-forest);
+  font-family: var(--hm-font-heading);
+  font-size: var(--hm-text-2xl);
+  font-weight: var(--hm-weight-regular);
+  cursor: text;
+}
+
+.titleInput {
+  width: 100%;
+  border: 1px solid var(--hm-color-border);
+  border-radius: var(--hm-radius-md);
+  background: var(--hm-color-white);
+  color: var(--hm-color-forest);
+  font-family: var(--hm-font-heading);
+  font-size: var(--hm-text-2xl);
+  font-weight: var(--hm-weight-regular);
+  padding: var(--hm-space-xs) var(--hm-space-sm);
+}
+
+.metaCard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--hm-space-md);
+}
+
+.metaGroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--hm-space-xs);
+}
+
+.metaLabel {
+  color: var(--hm-color-text-muted);
+  font-size: var(--hm-text-sm);
+  font-weight: var(--hm-weight-medium);
+}
+
+.metaValue {
+  color: var(--hm-color-forest);
+  font-size: var(--hm-text-base);
+}
+
+.metaMuted {
+  color: var(--hm-color-text-muted);
+  font-size: var(--hm-text-sm);
+}
+
+.tagWrap {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: var(--hm-space-xs);
+}
+
+.tagBadge {
+  display: inline-flex;
+  border-radius: var(--hm-radius-pill);
+  background: var(--hm-color-rose-light);
+  color: var(--hm-color-rose-dark);
+  font-size: var(--hm-text-xs);
+  font-weight: var(--hm-weight-medium);
+  padding: 2px var(--hm-space-sm);
+}
+
+.sourceLink {
+  color: var(--hm-color-sage);
+  font-size: var(--hm-text-base);
+  font-weight: var(--hm-weight-medium);
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--hm-space-sm);
+}
+
+.sectionTitle {
+  color: var(--hm-color-forest);
+  font-family: var(--hm-font-heading);
+  font-size: var(--hm-text-lg);
+  font-weight: var(--hm-weight-regular);
+}
+
+.instructionsView {
+  min-height: 180px;
+  border: 1px solid var(--hm-color-border);
+  border-radius: var(--hm-radius-md);
+  background: var(--hm-color-white);
+  color: var(--hm-color-forest);
+  font-size: var(--hm-text-base);
+  line-height: 1.6;
+  white-space: pre-wrap;
+  cursor: text;
+  padding: var(--hm-space-md);
+}
+
+.instructionsInput {
+  width: 100%;
+  min-height: 220px;
+  border: 1px solid var(--hm-color-border);
+  border-radius: var(--hm-radius-md);
+  background: var(--hm-color-white);
+  color: var(--hm-color-forest);
+  font-family: var(--hm-font-body);
+  font-size: var(--hm-text-base);
+  line-height: 1.6;
+  padding: var(--hm-space-md);
+  resize: vertical;
+}
+
+.deleteButton {
+  align-self: flex-start;
+  color: var(--hm-color-danger);
+}

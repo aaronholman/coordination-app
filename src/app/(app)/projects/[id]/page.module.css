@@ -1,0 +1,39 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--hm-space-xl);
+}
+
+.backLink {
+  color: var(--hm-color-sage);
+  font-family: var(--hm-font-body);
+  font-size: var(--hm-text-sm);
+  font-weight: var(--hm-weight-medium);
+}
+
+.headingBlock {
+  display: flex;
+  flex-direction: column;
+  gap: var(--hm-space-sm);
+}
+
+.title {
+  color: var(--hm-color-forest);
+  font-family: var(--hm-font-heading);
+  font-size: var(--hm-text-2xl);
+  font-weight: var(--hm-weight-regular);
+}
+
+.description {
+  color: var(--hm-color-text-muted);
+  font-family: var(--hm-font-body);
+  font-size: var(--hm-text-base);
+  font-weight: var(--hm-weight-regular);
+}
+
+.errorText {
+  color: var(--hm-color-danger);
+  font-family: var(--hm-font-body);
+  font-size: var(--hm-text-sm);
+  font-weight: var(--hm-weight-regular);
+}

@@ -1,0 +1,115 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--hm-space-lg);
+}
+
+.backLink {
+  color: var(--hm-color-sage);
+  font-size: var(--hm-text-sm);
+  font-weight: var(--hm-weight-medium);
+}
+
+.titleWrap {
+  display: flex;
+  align-items: center;
+}
+
+.title {
+  color: var(--hm-color-forest);
+  font-family: var(--hm-font-heading);
+  font-size: var(--hm-text-2xl);
+  font-weight: var(--hm-weight-regular);
+  cursor: text;
+}
+
+.titleInput {
+  width: 100%;
+  border: 1px solid var(--hm-color-border);
+  border-radius: var(--hm-radius-md);
+  background: var(--hm-color-white);
+  color: var(--hm-color-forest);
+  font-family: var(--hm-font-heading);
+  font-size: var(--hm-text-2xl);
+  font-weight: var(--hm-weight-regular);
+  padding: var(--hm-space-xs) var(--hm-space-sm);
+}
+
+.metaCard {
+  display: flex;
+  flex-direction: column;
+}
+
+.metaGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--hm-space-md);
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--hm-space-xs);
+}
+
+.fieldFull {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--hm-space-xs);
+}
+
+.metaLabel {
+  color: var(--hm-color-text-muted);
+  font-size: var(--hm-text-sm);
+  font-weight: var(--hm-weight-medium);
+}
+
+.metaControl {
+  width: 100%;
+  height: 40px;
+  border: 1px solid var(--hm-color-border);
+  border-radius: var(--hm-radius-md);
+  background: var(--hm-color-cream);
+  color: var(--hm-color-forest);
+  font-size: var(--hm-text-base);
+  padding: 0 var(--hm-space-sm);
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--hm-space-sm);
+}
+
+.sectionTitle {
+  color: var(--hm-color-forest);
+  font-family: var(--hm-font-heading);
+  font-size: var(--hm-text-lg);
+  font-weight: var(--hm-weight-regular);
+}
+
+.notesInput {
+  width: 100%;
+  min-height: 220px;
+  border: 1px solid var(--hm-color-border);
+  border-radius: var(--hm-radius-md);
+  background: var(--hm-color-white);
+  color: var(--hm-color-forest);
+  font-family: var(--hm-font-body);
+  font-size: var(--hm-text-base);
+  line-height: 1.6;
+  padding: var(--hm-space-md);
+  resize: vertical;
+}
+
+.deleteButton {
+  align-self: flex-start;
+  color: var(--hm-color-danger);
+}
+
+@media (max-width: 768px) {
+  .metaGrid {
+    grid-template-columns: 1fr;
+  }
+}

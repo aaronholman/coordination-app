@@ -1,0 +1,23 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--hm-space-md);
+}
+
+.newProjectButton {
+  height: 32px;
+  min-width: 128px;
+  width: auto;
+  padding: 0 var(--hm-space-md);
+}
+
+.emptyState {
+  border: 1px solid var(--hm-color-border);
+  border-radius: var(--hm-radius-lg);
+  background: var(--hm-color-warm-gray);
+  color: var(--hm-color-text-muted);
+  font-family: var(--hm-font-body);
+  font-size: var(--hm-text-sm);
+  font-weight: var(--hm-weight-regular);
+  padding: var(--hm-space-lg);
+}

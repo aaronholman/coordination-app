@@ -1,206 +1,176 @@
-import { createClient } from '@/lib/supabase/server';
-import { formatDistanceToNow } from 'date-fns';
+import Link from "next/link";
 
-export const revalidate = 0;
+import { createClient } from "@/lib/supabase/server";
+import type { GroceryItem, GroceryListItem, Profile, Task, TaskPriority } from "@/lib/types/database";
+import { getTimeOfDayGreeting } from "@/lib/utils/time";
 
-interface SummaryCard {
-  label: string;
-  value: number;
-  color: string;
+import styles from "./page.module.css";
+
+function formatDate(value: string | null) {
+  if (!value) return "No date";
+  return new Date(value).toLocaleDateString();
 }
 
-interface Task {
-  id: string;
-  title: string;
-  status: string;
-  updated_at: string;
-  project_id: string | null;
-  projects?: {
-    name: string;
-  } | null;
+function categoryLabel(value: string) {
+  return value.replace(/_/g, " ");
+}
+
+function priorityClass(priority: TaskPriority) {
+  if (priority === "urgent") return styles.priorityUrgent;
+  if (priority === "high") return styles.priorityHigh;
+  if (priority === "medium") return styles.priorityMedium;
+  return styles.priorityLow;
 }
 
 export default async function DashboardPage() {
   const supabase = await createClient();
-
-  // Get current user
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
-  if (!user) {
-    return <div>Not authenticated</div>;
-  }
+  if (!user) return null;
 
-  // Get user profile for greeting
   const { data: profile } = await supabase
-    .from('profiles')
-    .select('full_name')
-    .eq('id', user.id)
-    .single();
+    .from("profiles")
+    .select("*")
+    .eq("id", user.id)
+    .single<Profile>();
 
-  const displayName = (profile as any)?.full_name || 'there';
+  if (!profile) return null;
 
-  // Get projects count - active ones
-  const { data: projects, error: projectsError } = await supabase
-    .from('projects')
-    .select('id')
-    .eq('created_by', user.id)
-    .neq('status', 'done');
+  const [{ data: tasks }, { data: listItems }, { data: groceryItems }] = await Promise.all([
+    supabase
+      .from("tasks")
+      .select("*")
+      .eq("tenant_id", profile.tenant_id)
+      .eq("assignee_id", user.id)
+      .neq("status", "done")
+      .order("due_date", { ascending: true, nullsFirst: false })
+      .limit(8)
+      .returns<Task[]>(),
+    supabase
+      .from("grocery_list_items")
+      .select("*")
+      .eq("tenant_id", profile.tenant_id)
+      .eq("checked", false)
+      .order("created_at", { ascending: false })
+      .limit(8)
+      .returns<GroceryListItem[]>(),
+    supabase
+      .from("grocery_items")
+      .select("*")
+      .eq("tenant_id", profile.tenant_id)
+      .returns<GroceryItem[]>(),
+  ]);
 
-  // Get tasks count - open ones
-  const { data: tasks, error: tasksError } = await supabase
-    .from('tasks')
-    .select('id')
-    .eq('created_by', user.id)
-    .neq('status', 'done');
+  const itemById = new Map((groceryItems ?? []).map((item) => [item.id, item] as const));
+  const groceryRows = (listItems ?? [])
+    .map((listItem) => {
+      const item = itemById.get(listItem.item_id);
+      if (!item) return null;
+      return item;
+    })
+    .filter((item): item is GroceryItem => Boolean(item));
 
-  // Get this week's tasks - we'll count those due this week
-  const today = new Date();
-  const nextWeek = new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000);
-  const dateStr = today.toISOString().split('T')[0];
-  const nextDateStr = nextWeek.toISOString().split('T')[0];
-
-  const { data: weekTasks } = await supabase
-    .from('tasks')
-    .select('id')
-    .eq('created_by', user.id)
-    .neq('status', 'done')
-    .gte('due_date', dateStr)
-    .lte('due_date', nextDateStr);
-
-  // Get recent tasks
-  const { data: recentTasks } = await supabase
-    .from('tasks')
-    .select(`
-      id,
-      title,
-      status,
-      updated_at,
-      project_id,
-      projects (
-        name
-      )
-    `)
-    .eq('created_by', user.id)
-    .order('updated_at', { ascending: false })
-    .limit(5);
-
-  const summaryCards: SummaryCard[] = [
-    {
-      label: 'Active Projects',
-      value: projects?.length || 0,
-      color: 'bg-blue-100 text-blue-700',
-    },
-    {
-      label: 'Open Tasks',
-      value: tasks?.length || 0,
-      color: 'bg-green-100 text-green-700',
-    },
-    {
-      label: 'Due This Week',
-      value: weekTasks?.length || 0,
-      color: 'bg-orange-100 text-orange-700',
-    },
-  ];
-
-  // Get current hour for greeting
-  const hour = new Date().getHours();
-  let greeting = 'Good morning';
-  if (hour >= 12 && hour < 17) greeting = 'Good afternoon';
-  if (hour >= 17) greeting = 'Good evening';
+  const greetingName = profile.display_name?.split(" ")[0] || "there";
+  const greetingTime = getTimeOfDayGreeting();
 
   return (
-    <div className="space-y-8">
-      {/* Greeting */}
-      <div>
-        <h1 className="text-4xl font-bold text-gray-900">
-          {greeting}, {displayName}
+    <div className={styles.page}>
+      <section className={styles.greetingWrap}>
+        <h1 className={styles.greeting}>
+          Good {greetingTime}, {greetingName}
         </h1>
-        <p className="text-gray-600 mt-2">
-          {new Date().toLocaleDateString('en-US', {
-            weekday: 'long',
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric',
-          })}
-        </p>
-      </div>
+        <p className={styles.subGreeting}>You have {(tasks ?? []).length} open tasks</p>
+      </section>
 
-      {/* Summary Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {summaryCards.map((card) => (
-          <div
-            key={card.label}
-            className="bg-white rounded-lg shadow-sm border border-gray-200 p-6"
-          >
-            <p className="text-gray-600 text-sm font-medium mb-2">
-              {card.label}
-            </p>
-            <p className={`text-4xl font-bold ${card.color}`}>{card.value}</p>
-          </div>
-        ))}
-      </div>
+      <section className={styles.quickActions}>
+        <Link href="/tasks/new" className={styles.quickAction}>
+          <span className={styles.quickActionIcon}>
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="12" cy="12" r="9" />
+              <path d="M12 8v8M8 12h8" />
+            </svg>
+          </span>
+          <span>Add task</span>
+        </Link>
+        <Link href="/grocery?quickAdd=1" className={styles.quickAction}>
+          <span className={styles.quickActionIcon}>
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M5 7h14l-1.2 10.2A2 2 0 0 1 15.8 19H8.2a2 2 0 0 1-2-1.8L5 7Z" />
+              <path d="M8 7V5h8v2" />
+            </svg>
+          </span>
+          <span>Add grocery item</span>
+        </Link>
+        <Link href="/documents/new" className={styles.quickAction}>
+          <span className={styles.quickActionIcon}>
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M7 3h7l5 5v13H7z" />
+              <path d="M14 3v6h5" />
+            </svg>
+          </span>
+          <span>Add document</span>
+        </Link>
+      </section>
 
-      {/* Recent Tasks */}
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200">
-        <div className="p-6 border-b border-gray-200">
-          <h2 className="text-xl font-bold text-gray-900">Recent Tasks</h2>
-        </div>
-        {recentTasks && recentTasks.length > 0 ? (
-          <div className="divide-y divide-gray-200">
-            {(recentTasks as Task[]).map((task) => (
-              <div
-                key={task.id}
-                className="p-6 hover:bg-gray-50 transition-colors"
-              >
-                <div className="flex items-start justify-between">
-                  <div className="flex-1">
-                    <h3 className="font-medium text-gray-900">
+      <section className={styles.widgetGrid}>
+        <article className={`hm-card ${styles.widget}`}>
+          <h3 className={styles.widgetTitle}>My Tasks</h3>
+          {(tasks ?? []).length > 0 ? (
+            <div className={styles.taskList}>
+              {(tasks ?? []).map((task) => (
+                <div key={task.id} className={styles.taskRow}>
+                  <div className={styles.taskMain}>
+                    <span className={`${styles.priorityDot} ${priorityClass(task.priority)}`} />
+                    <Link href={`/tasks/${task.id}`} className={styles.taskLink}>
                       {task.title}
-                    </h3>
-                    {task.projects && (
-                      <p className="text-sm text-gray-500 mt-1">
-                        {task.projects.name}
-                      </p>
-                    )}
+                    </Link>
                   </div>
-                  <div className="ml-4 flex items-center gap-3">
-                    <span
-                      className={`px-3 py-1 rounded-full text-xs font-medium ${
-                        task.status === 'not_started'
-                          ? 'bg-gray-100 text-gray-700'
-                          : task.status === 'in_progress'
-                            ? 'bg-blue-100 text-blue-700'
-                            : task.status === 'done'
-                              ? 'bg-green-100 text-green-700'
-                              : 'bg-red-100 text-red-700'
-                      }`}
-                    >
-                      {task.status === 'not_started'
-                        ? 'Not Started'
-                        : task.status === 'in_progress'
-                          ? 'In Progress'
-                          : task.status === 'done'
-                            ? 'Done'
-                            : 'Abandoned'}
-                    </span>
-                    <span className="text-xs text-gray-500">
-                      {formatDistanceToNow(new Date(task.updated_at), {
-                        addSuffix: true,
-                      })}
-                    </span>
-                  </div>
+                  <span className={styles.taskDue}>{formatDate(task.due_date)}</span>
                 </div>
-              </div>
-            ))}
-          </div>
-        ) : (
-          <div className="p-6 text-center text-gray-500">
-            <p>No recent tasks</p>
-          </div>
-        )}
-      </div>
+              ))}
+            </div>
+          ) : (
+            <p className={styles.emptyText}>No open tasks right now.</p>
+          )}
+          <Link href="/tasks" className={styles.viewAll}>
+            View all {"\u2192"}
+          </Link>
+        </article>
+
+        <article className={`hm-card ${styles.widget}`}>
+          <h3 className={styles.widgetTitle}>Grocery List</h3>
+          {groceryRows.length > 0 ? (
+            <div className={styles.groceryList}>
+              {groceryRows.map((item) => (
+                <div key={item.id} className={styles.groceryRow}>
+                  <span className={styles.groceryName}>{item.name}</span>
+                  <span className={styles.groceryCategory}>{categoryLabel(item.category)}</span>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className={styles.emptyText}>No grocery items to pick up.</p>
+          )}
+          <Link href="/grocery" className={styles.viewAll}>
+            View all {"\u2192"}
+          </Link>
+        </article>
+      </section>
+
+      <article className={`hm-card ${styles.widget} ${styles.calendarWidget}`}>
+        <h3 className={styles.widgetTitle}>Family Calendar</h3>
+        <div className={styles.calendarFrame}>
+          <iframe
+            src="https://calendar.google.com/calendar/embed?src=family06377020747013711095%40group.calendar.google.com&ctz=America%2FNew_York"
+            frameBorder="0"
+            scrolling="no"
+            className={styles.calendarIframe}
+            title="Family Calendar"
+          />
+        </div>
+      </article>
     </div>
   );
 }

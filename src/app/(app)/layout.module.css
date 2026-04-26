@@ -1,0 +1,129 @@
+.shell {
+  min-height: 100vh;
+  background: var(--hm-color-cream);
+  color: var(--hm-color-forest);
+}
+
+.topNav {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  border-bottom: 1px solid var(--hm-color-border);
+  background: var(--hm-color-warm-gray);
+}
+
+.navInner {
+  display: flex;
+  align-items: center;
+  gap: var(--hm-space-lg);
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: var(--hm-space-md) var(--hm-space-lg);
+}
+
+.logo {
+  color: var(--hm-color-forest);
+  font-family: var(--hm-font-heading);
+  font-size: 1.75rem;
+  font-weight: 400;
+}
+
+.desktopNav {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--hm-space-md);
+}
+
+.navLink {
+  color: var(--hm-color-text-muted);
+  font-family: var(--hm-font-body);
+  font-size: 0.95rem;
+  font-weight: 400;
+  transition: color 120ms ease;
+}
+
+.navLinkActive {
+  color: var(--hm-color-sage);
+  font-weight: 500;
+}
+
+.divider {
+  width: 1px;
+  height: 1.1rem;
+  background: var(--hm-color-border);
+}
+
+.main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: var(--hm-space-xl) var(--hm-space-lg) calc(var(--hm-space-xl) + 84px);
+}
+
+.bottomNav {
+  display: none;
+}
+
+@media (max-width: 767px) {
+  .topNav {
+    display: none;
+  }
+
+  .main {
+    padding: var(--hm-space-lg) var(--hm-space-md) calc(var(--hm-space-2xl) + 88px);
+  }
+
+  .bottomNav {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 30;
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    gap: var(--hm-space-xs);
+    border-top: 1px solid var(--hm-color-border);
+    background: var(--hm-color-warm-gray);
+    padding: var(--hm-space-xs);
+  }
+
+  .mobileLink {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    color: var(--hm-color-text-muted);
+    font-family: var(--hm-font-body);
+    font-size: 0.66rem;
+    font-weight: 400;
+    gap: 2px;
+  }
+
+  .mobileLinkActive {
+    color: var(--hm-color-sage);
+    font-weight: 500;
+  }
+
+  .mobileIcon {
+    width: 18px;
+    height: 18px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .mobileIcon svg {
+    width: 18px;
+    height: 18px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .mobileLabel {
+    line-height: 1;
+  }
+}
