@@ -14,17 +14,21 @@ export function ResponsiveCalendarEmbed() {
 
   useEffect(() => {
     const mediaQuery = window.matchMedia("(max-width: 768px)");
-    const updateIsMobile = (event?: MediaQueryListEvent) => {
-      setIsMobile(event ? event.matches : mediaQuery.matches);
+    const updateIsMobile = (event: MediaQueryListEvent) => {
+      setIsMobile(event.matches);
     };
 
-    updateIsMobile();
+    const handleOrientationChange = () => {
+      setIsMobile(mediaQuery.matches);
+    };
+
+    setIsMobile(mediaQuery.matches);
     mediaQuery.addEventListener("change", updateIsMobile);
-    window.addEventListener("orientationchange", updateIsMobile);
+    window.addEventListener("orientationchange", handleOrientationChange);
 
     return () => {
       mediaQuery.removeEventListener("change", updateIsMobile);
-      window.removeEventListener("orientationchange", updateIsMobile);
+      window.removeEventListener("orientationchange", handleOrientationChange);
     };
   }, []);
 
