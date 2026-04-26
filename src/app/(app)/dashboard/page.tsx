@@ -2,6 +2,7 @@ import Link from "next/link";
 
 import { createClient } from "@/lib/supabase/server";
 import type { GroceryItem, GroceryListItem, Profile, Task, TaskPriority } from "@/lib/types/database";
+import { formatEnumLabel } from "@/lib/utils/formatting";
 
 import { ResponsiveCalendarEmbed } from "./ResponsiveCalendarEmbed";
 import styles from "./page.module.css";
@@ -12,7 +13,7 @@ function formatDate(value: string | null) {
 }
 
 function categoryLabel(value: string) {
-  return value.replace(/_/g, " ");
+  return formatEnumLabel(value);
 }
 
 function priorityClass(priority: TaskPriority) {

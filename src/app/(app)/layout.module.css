@@ -58,6 +58,10 @@
   background: var(--hm-color-border);
 }
 
+.navSpacer {
+  flex: 1;
+}
+
 .main {
   max-width: 1200px;
   margin: 0 auto;

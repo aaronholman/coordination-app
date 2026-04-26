@@ -5,8 +5,12 @@ import { useRouter } from "next/navigation";
 
 import { createClient } from "@/lib/supabase/client";
 import type { Profile, RecommendationStatus, RecommendationType } from "@/lib/types/database";
+import { formatEnumLabel } from "@/lib/utils/formatting";
 
 import styles from "../../new-form.module.css";
+
+const recommendationTypes: RecommendationType[] = ["show", "movie", "podcast", "book"];
+const recommendationStatuses: RecommendationStatus[] = ["not_yet", "watching", "watched"];
 
 export default function NewRecommendationPage() {
   const router = useRouter();
@@ -99,10 +103,11 @@ export default function NewRecommendationPage() {
               value={type}
               onChange={(event) => setType(event.target.value as RecommendationType)}
             >
-              <option value="show">show</option>
-              <option value="movie">movie</option>
-              <option value="podcast">podcast</option>
-              <option value="book">book</option>
+              {recommendationTypes.map((option) => (
+                <option key={option} value={option}>
+                  {formatEnumLabel(option)}
+                </option>
+              ))}
             </select>
           </div>
 
@@ -116,9 +121,11 @@ export default function NewRecommendationPage() {
               value={status}
               onChange={(event) => setStatus(event.target.value as RecommendationStatus)}
             >
-              <option value="not_yet">not_yet</option>
-              <option value="watching">watching</option>
-              <option value="watched">watched</option>
+              {recommendationStatuses.map((option) => (
+                <option key={option} value={option}>
+                  {formatEnumLabel(option)}
+                </option>
+              ))}
             </select>
           </div>
         </div>

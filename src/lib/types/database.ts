@@ -39,6 +39,8 @@ export interface Profile {
   tenant_id: string;
   display_name: string | null;
   email: string;
+  preferred_email: string | null;
+  secondary_email: string | null;
   avatar_url: string | null;
   role: ProfileRole;
   created_at: string;
@@ -241,6 +243,8 @@ export interface ProfileInsert {
   tenant_id: string;
   display_name: string | null;
   email: string;
+  preferred_email: string | null;
+  secondary_email: string | null;
   avatar_url: string | null;
   role: ProfileRole;
   created_at?: string;

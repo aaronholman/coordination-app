@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 
 import { createClient } from "@/lib/supabase/client";
 import type { Profile, ProjectStatus } from "@/lib/types/database";
+import { formatEnumLabel } from "@/lib/utils/formatting";
 
 import styles from "../../new-form.module.css";
 
@@ -109,9 +110,9 @@ export default function NewProjectPage() {
               value={status}
               onChange={(event) => setStatus(event.target.value as ProjectStatus)}
             >
-              <option value="active">Active</option>
-              <option value="inactive">Inactive</option>
-              <option value="archived">Archived</option>
+              <option value="active">{formatEnumLabel("active")}</option>
+              <option value="inactive">{formatEnumLabel("inactive")}</option>
+              <option value="archived">{formatEnumLabel("archived")}</option>
             </select>
           </div>
 

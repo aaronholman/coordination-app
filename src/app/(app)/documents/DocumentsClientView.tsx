@@ -7,6 +7,7 @@ import { useMemo, useState } from "react";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { DataTable, type DataTableColumn } from "@/components/tables/DataTable";
 import type { Document, Profile, Project } from "@/lib/types/database";
+import { formatEnumLabel } from "@/lib/utils/formatting";
 
 import styles from "./DocumentsClientView.module.css";
 
@@ -33,7 +34,7 @@ function formatDate(value: string) {
 }
 
 function categoryLabel(category: string) {
-  return category.charAt(0).toUpperCase() + category.slice(1);
+  return formatEnumLabel(category);
 }
 
 export function DocumentsClientView({
@@ -104,7 +105,7 @@ export function DocumentsClientView({
     {
       key: "category",
       label: "Category",
-      getValue: (row) => row.category,
+      getValue: (row) => formatEnumLabel(row.category),
       sortable: true,
       filterable: true,
       render: (row) => (

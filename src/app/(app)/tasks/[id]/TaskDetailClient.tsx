@@ -12,6 +12,7 @@ import type {
   TaskPriority,
   TaskStatus,
 } from "@/lib/types/database";
+import { formatEnumLabel } from "@/lib/utils/formatting";
 
 import styles from "./TaskDetailClient.module.css";
 
@@ -30,16 +31,16 @@ interface TaskDetailClientProps {
 }
 
 const statusOptions: { value: TaskStatus; label: string }[] = [
-  { value: "not_started", label: "Not started" },
-  { value: "in_progress", label: "In progress" },
-  { value: "done", label: "Done" },
+  { value: "not_started", label: formatEnumLabel("not_started") },
+  { value: "in_progress", label: formatEnumLabel("in_progress") },
+  { value: "done", label: formatEnumLabel("done") },
 ];
 
 const priorityOptions: { value: TaskPriority; label: string }[] = [
-  { value: "low", label: "Low" },
-  { value: "medium", label: "Medium" },
-  { value: "high", label: "High" },
-  { value: "urgent", label: "Urgent" },
+  { value: "low", label: formatEnumLabel("low") },
+  { value: "medium", label: formatEnumLabel("medium") },
+  { value: "high", label: formatEnumLabel("high") },
+  { value: "urgent", label: formatEnumLabel("urgent") },
 ];
 
 function formatDate(value: string | null) {
@@ -298,7 +299,7 @@ export function TaskDetailClient({
                 <a href={doc.url ?? "/documents"} className={styles.docLink}>
                   {doc.name}
                 </a>
-                <span className={styles.docCategory}>{doc.category}</span>
+                <span className={styles.docCategory}>{formatEnumLabel(doc.category)}</span>
                 <button
                   type="button"
                   className={styles.removeButton}
@@ -340,7 +341,7 @@ export function TaskDetailClient({
                     }}
                   >
                     <span>{doc.name}</span>
-                    <span className={styles.optionCategory}>{doc.category}</span>
+                    <span className={styles.optionCategory}>{formatEnumLabel(doc.category)}</span>
                   </button>
                 ))}
               </div>

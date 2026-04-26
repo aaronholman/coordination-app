@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 
 import { createClient } from "@/lib/supabase/client";
 import type { DocumentCategory, Profile, Project } from "@/lib/types/database";
+import { formatEnumLabel } from "@/lib/utils/formatting";
 
 import styles from "../../new-form.module.css";
 
@@ -197,7 +198,7 @@ export function NewDocumentForm() {
             >
               {categories.map((value) => (
                 <option key={value} value={value}>
-                  {value}
+                  {formatEnumLabel(value)}
                 </option>
               ))}
             </select>

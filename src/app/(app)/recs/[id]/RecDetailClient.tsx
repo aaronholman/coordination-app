@@ -6,8 +6,12 @@ import { useRouter } from "next/navigation";
 
 import { createClient } from "@/lib/supabase/client";
 import type { Recommendation, RecommendationStatus, RecommendationType } from "@/lib/types/database";
+import { formatEnumLabel } from "@/lib/utils/formatting";
 
 import styles from "./RecDetailClient.module.css";
+
+const recommendationTypes: RecommendationType[] = ["show", "movie", "podcast", "book"];
+const recommendationStatuses: RecommendationStatus[] = ["not_yet", "watching", "watched"];
 
 interface RecDetailClientProps {
   recommendation: Recommendation;
@@ -101,10 +105,11 @@ export function RecDetailClient({ recommendation }: RecDetailClientProps) {
                 await updateRecommendation({ type: value });
               }}
             >
-              <option value="show">show</option>
-              <option value="movie">movie</option>
-              <option value="podcast">podcast</option>
-              <option value="book">book</option>
+              {recommendationTypes.map((option) => (
+                <option key={option} value={option}>
+                  {formatEnumLabel(option)}
+                </option>
+              ))}
             </select>
           </div>
 
@@ -122,9 +127,11 @@ export function RecDetailClient({ recommendation }: RecDetailClientProps) {
                 await updateRecommendation({ status: value });
               }}
             >
-              <option value="not_yet">not_yet</option>
-              <option value="watching">watching</option>
-              <option value="watched">watched</option>
+              {recommendationStatuses.map((option) => (
+                <option key={option} value={option}>
+                  {formatEnumLabel(option)}
+                </option>
+              ))}
             </select>
           </div>
 

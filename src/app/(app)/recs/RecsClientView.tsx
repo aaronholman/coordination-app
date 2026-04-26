@@ -7,6 +7,7 @@ import { useMemo, useState } from "react";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { DataTable, type DataTableColumn } from "@/components/tables/DataTable";
 import type { Profile, Recommendation } from "@/lib/types/database";
+import { formatEnumLabel } from "@/lib/utils/formatting";
 
 import styles from "./RecsClientView.module.css";
 
@@ -41,12 +42,6 @@ function statusClass(value: Recommendation["status"]) {
   if (value === "watching") return styles.statusWatching;
   if (value === "watched") return styles.statusWatched;
   return styles.statusNotYet;
-}
-
-function statusLabel(value: Recommendation["status"]) {
-  if (value === "not_yet") return "Not yet";
-  if (value === "watching") return "Watching";
-  return "Watched";
 }
 
 export function RecsClientView({ recommendations, profiles }: RecsClientViewProps) {
@@ -88,20 +83,22 @@ export function RecsClientView({ recommendations, profiles }: RecsClientViewProp
     {
       key: "type",
       label: "Type",
-      getValue: (row) => row.type,
+      getValue: (row) => formatEnumLabel(row.type),
       sortable: true,
       filterable: true,
-      render: (row) => <span className={`${styles.pill} ${typeClass(row.type)}`}>{row.type}</span>,
+      render: (row) => (
+        <span className={`${styles.pill} ${typeClass(row.type)}`}>{formatEnumLabel(row.type)}</span>
+      ),
     },
     {
       key: "status",
       label: "Status",
-      getValue: (row) => statusLabel(row.status),
+      getValue: (row) => formatEnumLabel(row.status),
       sortable: true,
       filterable: true,
       render: (row) => (
         <span className={`${styles.pill} ${statusClass(row.status)}`}>
-          {statusLabel(row.status)}
+          {formatEnumLabel(row.status)}
         </span>
       ),
     },

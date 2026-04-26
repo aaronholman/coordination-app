@@ -5,8 +5,12 @@ import { useRouter, useSearchParams } from "next/navigation";
 
 import { createClient } from "@/lib/supabase/client";
 import type { Profile, Project, TaskPriority, TaskStatus } from "@/lib/types/database";
+import { formatEnumLabel } from "@/lib/utils/formatting";
 
 import styles from "../../new-form.module.css";
+
+const statusOptions: TaskStatus[] = ["not_started", "in_progress", "done"];
+const priorityOptions: TaskPriority[] = ["low", "medium", "high", "urgent"];
 
 export function NewTaskForm() {
   const router = useRouter();
@@ -184,9 +188,11 @@ export function NewTaskForm() {
               value={status}
               onChange={(event) => setStatus(event.target.value as TaskStatus)}
             >
-              <option value="not_started">Not started</option>
-              <option value="in_progress">In progress</option>
-              <option value="done">Done</option>
+              {statusOptions.map((option) => (
+                <option key={option} value={option}>
+                  {formatEnumLabel(option)}
+                </option>
+              ))}
             </select>
           </div>
 
@@ -200,10 +206,11 @@ export function NewTaskForm() {
               value={priority}
               onChange={(event) => setPriority(event.target.value as TaskPriority)}
             >
-              <option value="low">Low</option>
-              <option value="medium">Medium</option>
-              <option value="high">High</option>
-              <option value="urgent">Urgent</option>
+              {priorityOptions.map((option) => (
+                <option key={option} value={option}>
+                  {formatEnumLabel(option)}
+                </option>
+              ))}
             </select>
           </div>
 

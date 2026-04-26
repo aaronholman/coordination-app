@@ -16,6 +16,7 @@ import type {
   TaskPriority,
   TaskStatus,
 } from "@/lib/types/database";
+import { formatEnumLabel } from "@/lib/utils/formatting";
 
 import styles from "./ProjectDetailClient.module.css";
 
@@ -70,7 +71,7 @@ function statusClass(status: TaskStatus) {
 }
 
 function categoryLabel(category: DocumentCategory) {
-  return category.replace("_", " ");
+  return formatEnumLabel(category);
 }
 
 export function ProjectDetailClient({
@@ -201,13 +202,13 @@ export function ProjectDetailClient({
     {
       key: "status",
       label: "Status",
-      getValue: (row) => row.status,
+      getValue: (row) => formatEnumLabel(row.status),
       sortable: true,
       filterable: true,
       render: (row) => (
         <span className={styles.statusCell}>
           <span className={`${styles.statusDot} ${statusClass(row.status)}`} />
-          <span>{row.status.replace("_", " ")}</span>
+          <span>{formatEnumLabel(row.status)}</span>
         </span>
       ),
     },
@@ -226,13 +227,13 @@ export function ProjectDetailClient({
     {
       key: "priority",
       label: "Priority",
-      getValue: (row) => row.priority,
+      getValue: (row) => formatEnumLabel(row.priority),
       sortable: true,
       filterable: true,
       render: (row) => (
         <span className={styles.priorityCell}>
           <span className={`${styles.priorityDot} ${priorityClass(row.priority)}`} />
-          <span>{row.priority}</span>
+          <span>{formatEnumLabel(row.priority)}</span>
         </span>
       ),
     },
@@ -355,9 +356,9 @@ export function ProjectDetailClient({
                   await updateProject({ status: value });
                 }}
               >
-                <option value="active">active</option>
-                <option value="inactive">inactive</option>
-                <option value="archived">archived</option>
+                <option value="active">{formatEnumLabel("active")}</option>
+                <option value="inactive">{formatEnumLabel("inactive")}</option>
+                <option value="archived">{formatEnumLabel("archived")}</option>
               </select>
             </div>
 

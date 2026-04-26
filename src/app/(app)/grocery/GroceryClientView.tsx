@@ -13,6 +13,7 @@ import type {
   GroceryStore,
   Profile,
 } from "@/lib/types/database";
+import { formatEnumLabel } from "@/lib/utils/formatting";
 import { categorizeGroceryItem } from "@/lib/utils/grocery";
 
 import styles from "./GroceryClientView.module.css";
@@ -50,7 +51,7 @@ const categoryOrder: GroceryCategory[] = [
 ];
 
 function categoryLabel(category: GroceryCategory) {
-  return category.replace(/_/g, " ").toUpperCase();
+  return formatEnumLabel(category);
 }
 
 function formatTimestamp(value: string) {

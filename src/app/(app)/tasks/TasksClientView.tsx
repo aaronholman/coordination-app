@@ -13,6 +13,7 @@ import type {
   TaskPriority,
   TaskStatus,
 } from "@/lib/types/database";
+import { formatEnumLabel } from "@/lib/utils/formatting";
 
 import styles from "./TasksClientView.module.css";
 
@@ -38,12 +39,6 @@ function initials(name: string) {
 function formatDate(value: string | null) {
   if (!value) return "No date";
   return new Date(value).toLocaleDateString();
-}
-
-function statusLabel(status: TaskStatus) {
-  if (status === "not_started") return "Not started";
-  if (status === "in_progress") return "In progress";
-  return "Done";
 }
 
 function statusClass(status: TaskStatus) {
@@ -149,13 +144,13 @@ export function TasksClientView({ tasks, projects, profiles }: TasksClientViewPr
     {
       key: "status",
       label: "Status",
-      getValue: (row) => statusLabel(row.status),
+      getValue: (row) => formatEnumLabel(row.status),
       sortable: true,
       filterable: true,
       render: (row) => (
         <span className={styles.statusCell}>
           <span className={`${styles.statusDot} ${statusClass(row.status)}`} />
-          <span>{statusLabel(row.status)}</span>
+          <span>{formatEnumLabel(row.status)}</span>
         </span>
       ),
     },
@@ -173,13 +168,13 @@ export function TasksClientView({ tasks, projects, profiles }: TasksClientViewPr
     {
       key: "priority",
       label: "Priority",
-      getValue: (row) => row.priority,
+      getValue: (row) => formatEnumLabel(row.priority),
       sortable: true,
       filterable: true,
       render: (row) => (
         <span className={styles.priorityCell}>
           <span className={`${styles.priorityDot} ${priorityClass(row.priority)}`} />
-          <span>{row.priority}</span>
+          <span>{formatEnumLabel(row.priority)}</span>
         </span>
       ),
     },

@@ -5,6 +5,7 @@ import { useMemo, useState } from "react";
 
 import { FilterPills, type FilterOption } from "@/components/ui/FilterPills";
 import type { Project, ProjectStatus } from "@/lib/types/database";
+import { formatEnumLabel } from "@/lib/utils/formatting";
 
 import styles from "./ProjectsClientView.module.css";
 
@@ -12,9 +13,9 @@ type ProjectFilter = "all" | ProjectStatus;
 
 const filterOptions: FilterOption<ProjectFilter>[] = [
   { value: "all", label: "All" },
-  { value: "active", label: "Active" },
-  { value: "inactive", label: "Inactive" },
-  { value: "archived", label: "Archived" },
+  { value: "active", label: formatEnumLabel("active") },
+  { value: "inactive", label: formatEnumLabel("inactive") },
+  { value: "archived", label: formatEnumLabel("archived") },
 ];
 
 interface ProjectsClientViewProps {
@@ -63,11 +64,11 @@ export function ProjectsClientView({ projects }: ProjectsClientViewProps) {
 
             <div className={styles.cardFooter}>
               <span className={styles.categoryTag}>
-                {project.category ?? "Uncategorized"}
+                {project.category ? formatEnumLabel(project.category) : "Uncategorized"}
               </span>
               <span className={styles.statusWrap}>
                 <span className={`${styles.statusDot} ${statusClass(project.status)}`} />
-                <span className={styles.statusLabel}>{project.status.replace("_", " ")}</span>
+                <span className={styles.statusLabel}>{formatEnumLabel(project.status)}</span>
               </span>
             </div>
           </Link>

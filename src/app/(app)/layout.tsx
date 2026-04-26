@@ -91,10 +91,23 @@ const secondaryLinks: NavItem[] = [
       </svg>
     ),
   },
+  {
+    href: "/settings",
+    label: "Settings",
+    shortLabel: "Settings",
+    icon: (
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M12 9.2a2.8 2.8 0 1 1 0 5.6 2.8 2.8 0 0 1 0-5.6Z" />
+        <path d="M4 12.1c0-.4.3-.8.8-.9l1.2-.2c.2-.7.5-1.3.8-1.8l-.7-1a1 1 0 0 1 .1-1.2l1-1a1 1 0 0 1 1.2-.1l1 .7c.6-.3 1.2-.6 1.8-.8l.2-1.2c.1-.5.5-.8.9-.8h1.4c.4 0 .8.3.9.8l.2 1.2c.7.2 1.3.5 1.8.8l1-.7a1 1 0 0 1 1.2.1l1 1c.3.3.3.8.1 1.2l-.7 1c.3.6.6 1.2.8 1.8l1.2.2c.5.1.8.5.8.9v1.4c0 .4-.3.8-.8.9l-1.2.2c-.2.7-.5 1.3-.8 1.8l.7 1a1 1 0 0 1-.1 1.2l-1 1a1 1 0 0 1-1.2.1l-1-.7c-.6.3-1.2.6-1.8.8l-.2 1.2c-.1.5-.5.8-.9.8h-1.4a1 1 0 0 1-.9-.8l-.2-1.2a8 8 0 0 1-1.8-.8l-1 .7a1 1 0 0 1-1.2-.1l-1-1a1 1 0 0 1-.1-1.2l.7-1a8 8 0 0 1-.8-1.8l-1.2-.2a1 1 0 0 1-.8-.9v-1.4Z" />
+      </svg>
+    ),
+  },
 ];
 
 const mobilePrimaryLinks = [coreLinks[0], coreLinks[3], coreLinks[1]];
 const mobileActionLinks = [coreLinks[2], ...secondaryLinks];
+const desktopSettingsLink = secondaryLinks[secondaryLinks.length - 1];
+const desktopSecondaryLinks = secondaryLinks.slice(0, -1);
 
 function isActive(pathname: string, href: string) {
   return pathname === href || pathname.startsWith(`${href}/`);
@@ -152,9 +165,11 @@ export default function AppLayout({ children }: AppLayoutProps) {
               <NavLink key={item.href} item={item} pathname={pathname} />
             ))}
             <span className={styles.divider} aria-hidden="true" />
-            {secondaryLinks.map((item) => (
+            {desktopSecondaryLinks.map((item) => (
               <NavLink key={item.href} item={item} pathname={pathname} />
             ))}
+            <span className={styles.navSpacer} />
+            <NavLink item={desktopSettingsLink} pathname={pathname} />
           </nav>
 
           <nav className={styles.mobileNav} aria-label="Mobile navigation">

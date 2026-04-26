@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 
 import { createClient } from "@/lib/supabase/client";
 import type { Document, DocumentCategory, Profile, Project } from "@/lib/types/database";
+import { formatEnumLabel } from "@/lib/utils/formatting";
 
 import styles from "./DocumentDetailClient.module.css";
 
@@ -191,7 +192,7 @@ export function DocumentDetailClient({
             >
               {categoryOptions.map((option) => (
                 <option key={option} value={option}>
-                  {option}
+                  {formatEnumLabel(option)}
                 </option>
               ))}
             </select>
