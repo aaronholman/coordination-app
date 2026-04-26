@@ -3,7 +3,7 @@
 import { useCreateBlockNote } from "@blocknote/react";
 import { BlockNoteView } from "@blocknote/mantine";
 import type { PartialBlock } from "@blocknote/core";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import styles from "./RichTextEditor.module.css";
 import "@blocknote/core/fonts/inter.css";
@@ -30,12 +30,18 @@ export function RichTextEditor({
   onSave,
   placeholder = "Type / for commands",
 }: RichTextEditorProps) {
+  const [isMounted, setIsMounted] = useState(false);
   const editor = useCreateBlockNote({
     initialContent: undefined,
     placeholderText: placeholder,
   });
   const lastSavedRef = useRef("");
   const mountedRef = useRef(false);
+
+  // Ensure client-only rendering to prevent hydration errors
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   useEffect(() => {
     let active = true;
@@ -99,6 +105,17 @@ export function RichTextEditor({
 
     lastSavedRef.current = serialized;
     await onSave(serialized);
+  }
+
+  // Show loading placeholder until client-side mount
+  if (!isMounted) {
+    return (
+      <div className={styles.editorWrap}>
+        <div className={styles.placeholder} style={{ padding: "1rem", color: "#666" }}>
+          Loading editor...
+        </div>
+      </div>
+    );
   }
 
   return (

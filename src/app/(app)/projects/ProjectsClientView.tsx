@@ -5,7 +5,7 @@ import { useMemo, useState } from "react";
 
 import { FilterPills, type FilterOption } from "@/components/ui/FilterPills";
 import type { Project, ProjectStatus } from "@/lib/types/database";
-import { formatEnumLabel } from "@/lib/utils/formatting";
+import { formatEnumLabel, getPlainTextPreview } from "@/lib/utils/formatting";
 
 import styles from "./ProjectsClientView.module.css";
 
@@ -59,7 +59,7 @@ export function ProjectsClientView({ projects }: ProjectsClientViewProps) {
             <h2 className={styles.projectName}>{project.name}</h2>
 
             <p className={styles.description}>
-              {project.description ?? "No description yet."}
+              {getPlainTextPreview(project.description, 100) || "No description yet."}
             </p>
 
             <div className={styles.cardFooter}>

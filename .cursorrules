@@ -123,6 +123,7 @@ src/
 - Use named exports for components, default exports only for page.tsx files
 - All database queries go through Supabase client — never raw SQL in components
 - Every query must include `tenant_id` filtering (RLS handles this, but be explicit)
+- When displaying description, notes, or instructions fields outside the editor (in cards, tables, list previews), always use `getPlainTextPreview()` from `@/lib/utils/formatting.ts` to convert stored content to readable plain text
 
 ### Component Patterns
 - Components use CSS Modules (`.module.css`) that reference `--hm-*` variables
