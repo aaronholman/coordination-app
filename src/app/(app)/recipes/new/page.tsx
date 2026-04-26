@@ -3,6 +3,7 @@
 import { FormEvent, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 
+import { RichTextEditor } from "@/components/ui/RichTextEditor";
 import { createClient } from "@/lib/supabase/client";
 import type { Profile } from "@/lib/types/database";
 
@@ -133,14 +134,11 @@ export default function NewRecipePage() {
         </div>
 
         <div className={styles.field}>
-          <label className="hm-label" htmlFor="instructions">
-            Instructions
-          </label>
-          <textarea
-            id="instructions"
-            className={styles.textarea}
-            value={instructions}
-            onChange={(event) => setInstructions(event.target.value)}
+          <p className="hm-label">Instructions</p>
+          <RichTextEditor
+            initialContent={instructions}
+            placeholder="Add instructions..."
+            onSave={(nextInstructions) => setInstructions(nextInstructions)}
           />
         </div>
 

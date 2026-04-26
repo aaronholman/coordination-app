@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 
+import { RichTextEditor } from "@/components/ui/RichTextEditor";
 import { createClient } from "@/lib/supabase/client";
 import { DataTable, type DataTableColumn } from "@/components/tables/DataTable";
 import type {
@@ -324,18 +325,15 @@ export function ProjectDetailClient({
 
         <div className={`hm-card ${styles.projectMeta}`}>
           <div className={styles.metaItemWide}>
-            <label className={styles.metaLabel} htmlFor="project-description">
-              Description
-            </label>
-            <textarea
-              id="project-description"
-              className={styles.metaTextarea}
-              value={description}
-              onChange={(event) => setDescription(event.target.value)}
-              onBlur={async () => {
-                if (description !== savedDescription) {
-                  await updateProject({ description: description || null });
-                  setSavedDescription(description);
+            <p className={styles.metaLabel}>Description</p>
+            <RichTextEditor
+              initialContent={description}
+              placeholder="Add project description..."
+              onSave={async (nextDescription) => {
+                setDescription(nextDescription);
+                if (nextDescription !== savedDescription) {
+                  await updateProject({ description: nextDescription || null });
+                  setSavedDescription(nextDescription);
                 }
               }}
             />

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 
+import { RichTextEditor } from "@/components/ui/RichTextEditor";
 import { createClient } from "@/lib/supabase/client";
 import type { Recipe } from "@/lib/types/database";
 
@@ -21,7 +22,6 @@ export function RecipeDetailClient({ recipe }: RecipeDetailClientProps) {
   const [isEditingName, setIsEditingName] = useState(false);
   const [instructions, setInstructions] = useState(recipe.instructions ?? "");
   const [savedInstructions, setSavedInstructions] = useState(recipe.instructions ?? "");
-  const [isEditingInstructions, setIsEditingInstructions] = useState(false);
   const [deleting, setDeleting] = useState(false);
 
   useEffect(() => {
@@ -29,7 +29,6 @@ export function RecipeDetailClient({ recipe }: RecipeDetailClientProps) {
     setIsEditingName(false);
     setInstructions(recipe.instructions ?? "");
     setSavedInstructions(recipe.instructions ?? "");
-    setIsEditingInstructions(false);
   }, [recipe]);
 
   async function updateRecipe(patch: Partial<Recipe>) {
@@ -111,29 +110,17 @@ export function RecipeDetailClient({ recipe }: RecipeDetailClientProps) {
 
       <section className={styles.section}>
         <h3 className={styles.sectionTitle}>Instructions</h3>
-
-        {isEditingInstructions ? (
-          <textarea
-            className={styles.instructionsInput}
-            value={instructions}
-            onChange={(event) => setInstructions(event.target.value)}
-            onBlur={async () => {
-              setIsEditingInstructions(false);
-              if (instructions !== savedInstructions) {
-                await updateRecipe({ instructions: instructions || null });
-                setSavedInstructions(instructions);
-              }
-            }}
-            autoFocus
-          />
-        ) : (
-          <div
-            className={styles.instructionsView}
-            onClick={() => setIsEditingInstructions(true)}
-          >
-            {instructions || "Add instructions..."}
-          </div>
-        )}
+        <RichTextEditor
+          initialContent={instructions}
+          placeholder="Add instructions..."
+          onSave={async (nextInstructions) => {
+            setInstructions(nextInstructions);
+            if (nextInstructions !== savedInstructions) {
+              await updateRecipe({ instructions: nextInstructions || null });
+              setSavedInstructions(nextInstructions);
+            }
+          }}
+        />
       </section>
 
       <button

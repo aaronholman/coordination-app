@@ -1,0 +1,39 @@
+.editorWrap {
+  border: 1px solid var(--hm-color-border);
+  border-radius: var(--hm-radius-md);
+  background: transparent;
+}
+
+.editorWrap:focus-within {
+  border-color: var(--hm-color-sage);
+  box-shadow: 0 0 0 1px var(--hm-color-sage);
+}
+
+.editorWrap :global(.bn-container) {
+  background: transparent;
+  color: var(--hm-color-forest);
+  font-family: var(--hm-font-body);
+}
+
+.editorWrap :global(.bn-editor) {
+  min-height: 160px;
+  padding: var(--hm-space-sm) var(--hm-space-md);
+  background: transparent;
+  color: var(--hm-color-forest);
+}
+
+.editorWrap :global(.bn-inline-content) {
+  font-family: var(--hm-font-body);
+  color: var(--hm-color-forest);
+}
+
+.editorWrap :global(.bn-toolbar) {
+  display: none;
+}
+
+.editorWrap :global(.bn-slash-menu),
+.editorWrap :global(.bn-suggestion-menu) {
+  border: 1px solid var(--hm-color-border);
+  background: var(--hm-color-warm-gray);
+  border-radius: var(--hm-radius-md);
+}

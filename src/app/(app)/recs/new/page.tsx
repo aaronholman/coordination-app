@@ -3,6 +3,7 @@
 import { FormEvent, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 
+import { RichTextEditor } from "@/components/ui/RichTextEditor";
 import { createClient } from "@/lib/supabase/client";
 import type { Profile, RecommendationStatus, RecommendationType } from "@/lib/types/database";
 import { formatEnumLabel } from "@/lib/utils/formatting";
@@ -143,14 +144,11 @@ export default function NewRecommendationPage() {
         </div>
 
         <div className={styles.field}>
-          <label className="hm-label" htmlFor="notes">
-            Notes
-          </label>
-          <textarea
-            id="notes"
-            className={styles.textarea}
-            value={notes}
-            onChange={(event) => setNotes(event.target.value)}
+          <p className="hm-label">Notes</p>
+          <RichTextEditor
+            initialContent={notes}
+            placeholder="Add notes..."
+            onSave={(nextNotes) => setNotes(nextNotes)}
           />
         </div>
 

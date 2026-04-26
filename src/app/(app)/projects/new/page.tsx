@@ -3,6 +3,7 @@
 import { FormEvent, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 
+import { RichTextEditor } from "@/components/ui/RichTextEditor";
 import { createClient } from "@/lib/supabase/client";
 import type { Profile, ProjectStatus } from "@/lib/types/database";
 import { formatEnumLabel } from "@/lib/utils/formatting";
@@ -88,14 +89,11 @@ export default function NewProjectPage() {
         </div>
 
         <div className={styles.field}>
-          <label className="hm-label" htmlFor="description">
-            Description
-          </label>
-          <textarea
-            id="description"
-            className={styles.textarea}
-            value={description}
-            onChange={(event) => setDescription(event.target.value)}
+          <p className="hm-label">Description</p>
+          <RichTextEditor
+            initialContent={description}
+            placeholder="Add project description..."
+            onSave={(nextDescription) => setDescription(nextDescription)}
           />
         </div>
 

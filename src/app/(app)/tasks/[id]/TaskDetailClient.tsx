@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 
+import { RichTextEditor } from "@/components/ui/RichTextEditor";
 import { createClient } from "@/lib/supabase/client";
 import type {
   Document,
@@ -361,19 +362,17 @@ export function TaskDetailClient({
 
       <section className={styles.section}>
         <h3 className={styles.sectionTitle}>Details</h3>
-        <textarea
-          className={styles.detailsInput}
-          value={description}
-          onChange={(event) => setDescription(event.target.value)}
-          onBlur={async () => {
-            if (description !== savedDescription) {
-              await updateTask({ description });
-              setSavedDescription(description);
+        <RichTextEditor
+          initialContent={description}
+          placeholder="Add task details..."
+          onSave={async (nextDescription) => {
+            setDescription(nextDescription);
+            if (nextDescription !== savedDescription) {
+              await updateTask({ description: nextDescription || null });
+              setSavedDescription(nextDescription);
             }
           }}
-          placeholder="Add task details..."
         />
-        <p className={styles.markdownHint}>Use markdown</p>
       </section>
     </div>
   );

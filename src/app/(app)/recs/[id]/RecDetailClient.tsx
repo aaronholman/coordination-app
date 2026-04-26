@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 
+import { RichTextEditor } from "@/components/ui/RichTextEditor";
 import { createClient } from "@/lib/supabase/client";
 import type { Recommendation, RecommendationStatus, RecommendationType } from "@/lib/types/database";
 import { formatEnumLabel } from "@/lib/utils/formatting";
@@ -159,14 +160,14 @@ export function RecDetailClient({ recommendation }: RecDetailClientProps) {
 
       <section className={styles.section}>
         <h3 className={styles.sectionTitle}>Notes</h3>
-        <textarea
-          className={styles.notesInput}
-          value={notes}
-          onChange={(event) => setNotes(event.target.value)}
-          onBlur={async () => {
-            if (notes !== savedNotes) {
-              await updateRecommendation({ notes: notes || null });
-              setSavedNotes(notes);
+        <RichTextEditor
+          initialContent={notes}
+          placeholder="Add notes..."
+          onSave={async (nextNotes) => {
+            setNotes(nextNotes);
+            if (nextNotes !== savedNotes) {
+              await updateRecommendation({ notes: nextNotes || null });
+              setSavedNotes(nextNotes);
             }
           }}
         />

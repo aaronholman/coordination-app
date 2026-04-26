@@ -3,6 +3,7 @@
 import { FormEvent, useEffect, useMemo, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
+import { RichTextEditor } from "@/components/ui/RichTextEditor";
 import { createClient } from "@/lib/supabase/client";
 import type { Profile, Project, TaskPriority, TaskStatus } from "@/lib/types/database";
 import { formatEnumLabel } from "@/lib/utils/formatting";
@@ -229,14 +230,11 @@ export function NewTaskForm() {
         </div>
 
         <div className={styles.field}>
-          <label className="hm-label" htmlFor="description">
-            Description
-          </label>
-          <textarea
-            id="description"
-            className={styles.textarea}
-            value={description}
-            onChange={(event) => setDescription(event.target.value)}
+          <p className="hm-label">Description</p>
+          <RichTextEditor
+            initialContent={description}
+            placeholder="Add task details..."
+            onSave={(nextDescription) => setDescription(nextDescription)}
           />
         </div>
 
