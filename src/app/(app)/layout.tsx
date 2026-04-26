@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import type { ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 
 import styles from "./layout.module.css";
 
@@ -93,7 +93,8 @@ const secondaryLinks: NavItem[] = [
   },
 ];
 
-const mobileLinks = [...coreLinks, ...secondaryLinks];
+const mobilePrimaryLinks = [coreLinks[0], coreLinks[3], coreLinks[1]];
+const mobileActionLinks = [coreLinks[2], ...secondaryLinks];
 
 function isActive(pathname: string, href: string) {
   return pathname === href || pathname.startsWith(`${href}/`);
@@ -112,22 +113,31 @@ function NavLink({ item, pathname }: { item: NavItem; pathname: string }) {
   );
 }
 
-function MobileNavLink({ item, pathname }: { item: NavItem; pathname: string }) {
-  const active = isActive(pathname, item.href);
-
-  return (
-    <Link
-      href={item.href}
-      className={`${styles.mobileLink} ${active ? styles.mobileLinkActive : ""}`}
-    >
-      <span className={styles.mobileIcon}>{item.icon}</span>
-      <span className={styles.mobileLabel}>{item.shortLabel}</span>
-    </Link>
-  );
-}
-
 export default function AppLayout({ children }: AppLayoutProps) {
   const pathname = usePathname();
+  const [isActionsOpen, setIsActionsOpen] = useState(false);
+  const mobileActionsRef = useRef<HTMLDivElement>(null);
+  const actionsActive = mobileActionLinks.some((item) => isActive(pathname, item.href));
+
+  useEffect(() => {
+    setIsActionsOpen(false);
+  }, [pathname]);
+
+  useEffect(() => {
+    function handlePointerDown(event: PointerEvent) {
+      if (!mobileActionsRef.current) {
+        return;
+      }
+      if (!mobileActionsRef.current.contains(event.target as Node)) {
+        setIsActionsOpen(false);
+      }
+    }
+
+    document.addEventListener("pointerdown", handlePointerDown);
+    return () => {
+      document.removeEventListener("pointerdown", handlePointerDown);
+    };
+  }, []);
 
   return (
     <div className={styles.shell}>
@@ -146,16 +156,56 @@ export default function AppLayout({ children }: AppLayoutProps) {
               <NavLink key={item.href} item={item} pathname={pathname} />
             ))}
           </nav>
+
+          <nav className={styles.mobileNav} aria-label="Mobile navigation">
+            {mobilePrimaryLinks.map((item) => {
+              const active = isActive(pathname, item.href);
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={`${styles.mobileTopLink} ${active ? styles.mobileTopLinkActive : ""}`}
+                >
+                  {item.label}
+                </Link>
+              );
+            })}
+
+            <div className={styles.mobileActions} ref={mobileActionsRef}>
+              <button
+                type="button"
+                className={`${styles.mobileActionsButton} ${
+                  actionsActive || isActionsOpen ? styles.mobileTopLinkActive : ""
+                }`}
+                onClick={() => setIsActionsOpen((open) => !open)}
+                aria-expanded={isActionsOpen}
+                aria-controls="mobile-actions-menu"
+              >
+                Actions
+              </button>
+
+              {isActionsOpen ? (
+                <div id="mobile-actions-menu" className={styles.mobileActionsMenu}>
+                  {mobileActionLinks.map((item) => {
+                    const active = isActive(pathname, item.href);
+                    return (
+                      <Link
+                        key={item.href}
+                        href={item.href}
+                        className={`${styles.mobileActionLink} ${active ? styles.mobileTopLinkActive : ""}`}
+                      >
+                        {item.label}
+                      </Link>
+                    );
+                  })}
+                </div>
+              ) : null}
+            </div>
+          </nav>
         </div>
       </header>
 
       <main className={styles.main}>{children}</main>
-
-      <nav className={styles.bottomNav} aria-label="Mobile navigation">
-        {mobileLinks.map((item) => (
-          <MobileNavLink key={item.href} item={item} pathname={pathname} />
-        ))}
-      </nav>
     </div>
   );
 }

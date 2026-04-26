@@ -4,25 +4,6 @@
   gap: var(--hm-space-lg);
 }
 
-.greetingWrap {
-  display: flex;
-  flex-direction: column;
-  gap: var(--hm-space-xs);
-}
-
-.greeting {
-  color: var(--hm-color-forest);
-  font-family: var(--hm-font-heading);
-  font-size: var(--hm-text-2xl);
-  font-weight: var(--hm-weight-regular);
-}
-
-.subGreeting {
-  color: var(--hm-color-text-muted);
-  font-size: var(--hm-text-base);
-  font-weight: var(--hm-weight-regular);
-}
-
 .quickActions {
   display: flex;
   flex-wrap: wrap;

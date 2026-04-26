@@ -35,6 +35,10 @@
   gap: var(--hm-space-md);
 }
 
+.mobileNav {
+  display: none;
+}
+
 .navLink {
   color: var(--hm-color-text-muted);
   font-family: var(--hm-font-body);
@@ -57,73 +61,85 @@
 .main {
   max-width: 1200px;
   margin: 0 auto;
-  padding: var(--hm-space-xl) var(--hm-space-lg) calc(var(--hm-space-xl) + 84px);
-}
-
-.bottomNav {
-  display: none;
+  padding: var(--hm-space-xl) var(--hm-space-lg);
 }
 
 @media (max-width: 767px) {
-  .topNav {
+  .navInner {
+    align-items: stretch;
+    flex-direction: column;
+    gap: var(--hm-space-sm);
+    padding: var(--hm-space-sm) var(--hm-space-md) var(--hm-space-md);
+  }
+
+  .logo {
+    font-size: 1.5rem;
+  }
+
+  .desktopNav {
     display: none;
   }
 
-  .main {
-    padding: var(--hm-space-lg) var(--hm-space-md) calc(var(--hm-space-2xl) + 88px);
-  }
-
-  .bottomNav {
-    position: fixed;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    z-index: 30;
-    display: grid;
-    grid-template-columns: repeat(7, minmax(0, 1fr));
-    gap: var(--hm-space-xs);
-    border-top: 1px solid var(--hm-color-border);
-    background: var(--hm-color-warm-gray);
-    padding: var(--hm-space-xs);
-  }
-
-  .mobileLink {
+  .mobileNav {
     display: flex;
-    flex-direction: column;
+    position: relative;
+    flex-wrap: wrap;
     align-items: center;
-    justify-content: center;
-    min-height: 44px;
-    color: var(--hm-color-text-muted);
-    font-family: var(--hm-font-body);
-    font-size: 0.66rem;
-    font-weight: 400;
-    gap: 2px;
+    gap: var(--hm-space-sm);
   }
 
-  .mobileLinkActive {
+  .mobileTopLink,
+  .mobileActionsButton {
+    min-height: 44px;
+    padding: var(--hm-space-xs) var(--hm-space-sm);
+    border-radius: 999px;
+    border: 0;
+    background: transparent;
+    font-family: var(--hm-font-body);
+    font-size: 0.95rem;
+    font-weight: 400;
+    line-height: 1;
+    cursor: pointer;
+    color: var(--hm-color-text-muted);
+  }
+
+  .mobileTopLinkActive {
     color: var(--hm-color-sage);
     font-weight: 500;
   }
 
-  .mobileIcon {
-    width: 18px;
-    height: 18px;
-    display: inline-flex;
+  .mobileActions {
+    position: relative;
+  }
+
+  .mobileActionsMenu {
+    position: absolute;
+    top: calc(100% + var(--hm-space-xs));
+    right: 0;
+    min-width: 156px;
+    display: flex;
+    flex-direction: column;
+    gap: var(--hm-space-xs);
+    padding: var(--hm-space-xs);
+    border: 1px solid var(--hm-color-border);
+    border-radius: 12px;
+    background: var(--hm-color-warm-gray);
+    box-shadow: 0 8px 24px rgba(32, 42, 38, 0.08);
+  }
+
+  .mobileActionLink {
+    min-height: 44px;
+    display: flex;
     align-items: center;
-    justify-content: center;
+    padding: 0 var(--hm-space-sm);
+    border-radius: 10px;
+    color: var(--hm-color-text-muted);
+    font-family: var(--hm-font-body);
+    font-size: 0.95rem;
+    font-weight: 400;
   }
 
-  .mobileIcon svg {
-    width: 18px;
-    height: 18px;
-    fill: none;
-    stroke: currentColor;
-    stroke-width: 1.8;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-  }
-
-  .mobileLabel {
-    line-height: 1;
+  .main {
+    padding: var(--hm-space-lg) var(--hm-space-md);
   }
 }

@@ -2,8 +2,8 @@ import Link from "next/link";
 
 import { createClient } from "@/lib/supabase/server";
 import type { GroceryItem, GroceryListItem, Profile, Task, TaskPriority } from "@/lib/types/database";
-import { getTimeOfDayGreeting } from "@/lib/utils/time";
 
+import { ResponsiveCalendarEmbed } from "./ResponsiveCalendarEmbed";
 import styles from "./page.module.css";
 
 function formatDate(value: string | null) {
@@ -72,18 +72,8 @@ export default async function DashboardPage() {
     })
     .filter((item): item is GroceryItem => Boolean(item));
 
-  const greetingName = profile.display_name?.split(" ")[0] || "there";
-  const greetingTime = getTimeOfDayGreeting();
-
   return (
     <div className={styles.page}>
-      <section className={styles.greetingWrap}>
-        <h1 className={styles.greeting}>
-          Good {greetingTime}, {greetingName}
-        </h1>
-        <p className={styles.subGreeting}>You have {(tasks ?? []).length} open tasks</p>
-      </section>
-
       <section className={styles.quickActions}>
         <Link href="/tasks/new" className={styles.quickAction}>
           <span className={styles.quickActionIcon}>
@@ -162,13 +152,7 @@ export default async function DashboardPage() {
       <article className={`hm-card ${styles.widget} ${styles.calendarWidget}`}>
         <h3 className={styles.widgetTitle}>Family Calendar</h3>
         <div className={styles.calendarFrame}>
-          <iframe
-            src="https://calendar.google.com/calendar/embed?src=family06377020747013711095%40group.calendar.google.com&ctz=America%2FNew_York"
-            frameBorder="0"
-            scrolling="no"
-            className={styles.calendarIframe}
-            title="Family Calendar"
-          />
+          <ResponsiveCalendarEmbed />
         </div>
       </article>
     </div>
