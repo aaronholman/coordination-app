@@ -9,19 +9,25 @@ export interface FilterOption<T extends string> {
 
 interface FilterPillsProps<T extends string> {
   options: FilterOption<T>[];
-  activeValue: T;
-  onChange: (value: T) => void;
+  activeValue?: T;
+  activeValues?: T[];
+  onChange?: (value: T) => void;
+  onToggle?: (value: T) => void;
 }
 
 export function FilterPills<T extends string>({
   options,
   activeValue,
+  activeValues,
   onChange,
+  onToggle,
 }: FilterPillsProps<T>) {
   return (
     <div className={styles.pills} role="tablist" aria-label="Filters">
       {options.map((option) => {
-        const isActive = option.value === activeValue;
+        const isActive = activeValues
+          ? activeValues.includes(option.value)
+          : option.value === activeValue;
 
         return (
           <button
@@ -30,7 +36,15 @@ export function FilterPills<T extends string>({
             role="tab"
             aria-selected={isActive}
             className={`${styles.pill} ${isActive ? styles.pillActive : ""}`}
-            onClick={() => onChange(option.value)}
+            onClick={() => {
+              if (onToggle) {
+                onToggle(option.value);
+                return;
+              }
+              if (onChange) {
+                onChange(option.value);
+              }
+            }}
           >
             {option.label}
           </button>

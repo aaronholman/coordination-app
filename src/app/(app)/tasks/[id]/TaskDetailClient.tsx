@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 
+import { MultiSelect } from "@/components/ui/MultiSelect";
 import { RichTextEditor } from "@/components/ui/RichTextEditor";
 import { createClient } from "@/lib/supabase/client";
 import type {
@@ -33,8 +34,10 @@ interface TaskDetailClientProps {
 
 const statusOptions: { value: TaskStatus; label: string }[] = [
   { value: "not_started", label: formatEnumLabel("not_started") },
-  { value: "in_progress", label: formatEnumLabel("in_progress") },
+  { value: "active", label: formatEnumLabel("active") },
+  { value: "inactive", label: formatEnumLabel("inactive") },
   { value: "done", label: formatEnumLabel("done") },
+  { value: "archived", label: formatEnumLabel("archived") },
 ];
 
 const priorityOptions: { value: TaskPriority; label: string }[] = [
@@ -75,7 +78,13 @@ export function TaskDetailClient({
   const [title, setTitle] = useState(task.title);
   const [isEditingTitle, setIsEditingTitle] = useState(false);
   const [projectId, setProjectId] = useState(task.project_id ?? "");
-  const [assigneeId, setAssigneeId] = useState(task.assignee_id ?? "");
+  const [assigneeIds, setAssigneeIds] = useState<string[]>(
+    task.assignee_ids && task.assignee_ids.length > 0
+      ? task.assignee_ids
+      : task.assignee_id
+        ? [task.assignee_id]
+        : [],
+  );
   const [status, setStatus] = useState<TaskStatus>(task.status);
   const [dueDate, setDueDate] = useState(toDateInput(task.due_date));
   const [priority, setPriority] = useState<TaskPriority>(task.priority);
@@ -94,7 +103,13 @@ export function TaskDetailClient({
     setTitle(task.title);
     setIsEditingTitle(false);
     setProjectId(task.project_id ?? "");
-    setAssigneeId(task.assignee_id ?? "");
+    setAssigneeIds(
+      task.assignee_ids && task.assignee_ids.length > 0
+        ? task.assignee_ids
+        : task.assignee_id
+          ? [task.assignee_id]
+          : [],
+    );
     setStatus(task.status);
     setDueDate(toDateInput(task.due_date));
     setPriority(task.priority);
@@ -208,22 +223,21 @@ export function TaskDetailClient({
 
         <div className={styles.metaItem}>
           <p className={styles.metaLabel}>Assignee</p>
-          <select
-            className={styles.metaControl}
-            value={assigneeId}
-            onChange={async (event) => {
-              const value = event.target.value;
-              setAssigneeId(value);
-              await updateTask({ assignee_id: value || null });
+          <MultiSelect
+            options={profiles.map((item) => ({
+              value: item.id,
+              label: item.display_name ?? item.email,
+            }))}
+            selected={assigneeIds}
+            onChange={(nextAssigneeIds) => {
+              setAssigneeIds(nextAssigneeIds);
+              void updateTask({
+                assignee_id: nextAssigneeIds[0] ?? null,
+                assignee_ids: nextAssigneeIds.length > 0 ? nextAssigneeIds : null,
+              });
             }}
-          >
-            <option value="">Unassigned</option>
-            {profiles.map((item) => (
-              <option key={item.id} value={item.id}>
-                {item.display_name ?? item.email}
-              </option>
-            ))}
-          </select>
+            placeholder="Select assignees"
+          />
         </div>
 
         <div className={styles.metaItem}>

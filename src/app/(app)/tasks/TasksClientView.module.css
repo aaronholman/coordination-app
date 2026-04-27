@@ -60,15 +60,23 @@
 }
 
 .statusNotStarted {
-  background: var(--hm-color-border-hover);
+  background: var(--hm-color-text-muted);
 }
 
-.statusInProgress {
+.statusActive {
+  background: var(--hm-color-sage);
+}
+
+.statusInactive {
   background: var(--hm-color-warning);
 }
 
 .statusDone {
-  background: var(--hm-color-success);
+  background: var(--hm-color-info);
+}
+
+.statusArchived {
+  background: var(--hm-color-border-hover);
 }
 
 .priorityLow {

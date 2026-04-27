@@ -160,15 +160,23 @@
   border-radius: var(--hm-radius-pill);
 }
 
-.statusDone {
-  background: var(--hm-color-success);
+.statusNotStarted {
+  background: var(--hm-color-text-muted);
 }
 
-.statusInProgress {
+.statusActive {
+  background: var(--hm-color-sage);
+}
+
+.statusInactive {
   background: var(--hm-color-warning);
 }
 
-.statusNotStarted {
+.statusDone {
+  background: var(--hm-color-info);
+}
+
+.statusArchived {
   background: var(--hm-color-border-hover);
 }
 

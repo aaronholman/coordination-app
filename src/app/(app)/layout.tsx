@@ -196,7 +196,10 @@ export default function AppLayout({ children }: AppLayoutProps) {
                 aria-expanded={isActionsOpen}
                 aria-controls="mobile-actions-menu"
               >
-                Actions
+                <span>Actions</span>
+                <span className={styles.mobileActionsChevron} aria-hidden="true">
+                  ▾
+                </span>
               </button>
 
               {isActionsOpen ? (

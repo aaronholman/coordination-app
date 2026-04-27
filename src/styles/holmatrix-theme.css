@@ -172,6 +172,9 @@ a:hover {
 .hm-btn-primary {
   width: 100%;
   height: 42px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   font-family: var(--hm-font-body);
   font-size: 14px;
   font-weight: var(--hm-weight-medium);
@@ -189,6 +192,9 @@ a:hover {
 
 /* Secondary / text button */
 .hm-btn-text {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   font-family: var(--hm-font-body);
   font-size: var(--hm-text-xs);
   color: var(--hm-color-rose);

@@ -66,8 +66,10 @@ function priorityClass(priority: TaskPriority) {
 }
 
 function statusClass(status: TaskStatus) {
+  if (status === "active") return styles.statusActive;
+  if (status === "inactive") return styles.statusInactive;
   if (status === "done") return styles.statusDone;
-  if (status === "in_progress") return styles.statusInProgress;
+  if (status === "archived") return styles.statusArchived;
   return styles.statusNotStarted;
 }
 
@@ -354,8 +356,10 @@ export function ProjectDetailClient({
                   await updateProject({ status: value });
                 }}
               >
+                <option value="not_started">{formatEnumLabel("not_started")}</option>
                 <option value="active">{formatEnumLabel("active")}</option>
                 <option value="inactive">{formatEnumLabel("inactive")}</option>
+                <option value="done">{formatEnumLabel("done")}</option>
                 <option value="archived">{formatEnumLabel("archived")}</option>
               </select>
             </div>

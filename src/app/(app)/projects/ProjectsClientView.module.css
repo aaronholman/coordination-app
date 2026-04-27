@@ -71,16 +71,24 @@
   border-radius: var(--hm-radius-pill);
 }
 
+.statusDotNotStarted {
+  background: var(--hm-color-text-muted);
+}
+
 .statusDotActive {
-  background: var(--hm-color-success);
+  background: var(--hm-color-sage);
 }
 
 .statusDotInactive {
-  background: var(--hm-color-border-hover);
+  background: var(--hm-color-warning);
+}
+
+.statusDotDone {
+  background: var(--hm-color-info);
 }
 
 .statusDotArchived {
-  background: var(--hm-color-text-muted);
+  background: var(--hm-color-border-hover);
 }
 
 .statusLabel {

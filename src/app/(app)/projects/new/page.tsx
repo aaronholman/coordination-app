@@ -10,6 +10,14 @@ import { formatEnumLabel } from "@/lib/utils/formatting";
 
 import styles from "../../new-form.module.css";
 
+const projectStatusOptions: ProjectStatus[] = [
+  "not_started",
+  "active",
+  "inactive",
+  "done",
+  "archived",
+];
+
 export default function NewProjectPage() {
   const router = useRouter();
   const supabase = useMemo(() => createClient(), []);
@@ -108,9 +116,11 @@ export default function NewProjectPage() {
               value={status}
               onChange={(event) => setStatus(event.target.value as ProjectStatus)}
             >
-              <option value="active">{formatEnumLabel("active")}</option>
-              <option value="inactive">{formatEnumLabel("inactive")}</option>
-              <option value="archived">{formatEnumLabel("archived")}</option>
+              {projectStatusOptions.map((option) => (
+                <option key={option} value={option}>
+                  {formatEnumLabel(option)}
+                </option>
+              ))}
             </select>
           </div>
 

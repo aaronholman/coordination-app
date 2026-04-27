@@ -161,6 +161,10 @@
 }
 
 @media (max-width: 767px) {
+  .quickActions {
+    display: none;
+  }
+
   .calendarIframe {
     min-height: 350px;
   }

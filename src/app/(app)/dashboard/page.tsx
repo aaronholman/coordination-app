@@ -44,7 +44,7 @@ export default async function DashboardPage() {
       .from("tasks")
       .select("*")
       .eq("tenant_id", profile.tenant_id)
-      .eq("assignee_id", user.id)
+      .or(`assignee_id.eq.${user.id},assignee_ids.cs.{${user.id}}`)
       .neq("status", "done")
       .order("due_date", { ascending: true, nullsFirst: false })
       .limit(8)

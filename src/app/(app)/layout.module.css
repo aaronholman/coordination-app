@@ -85,26 +85,34 @@
   }
 
   .mobileNav {
-    display: flex;
+    display: grid;
+    width: 100%;
     position: relative;
-    flex-wrap: wrap;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     align-items: center;
-    gap: var(--hm-space-sm);
+    gap: var(--hm-space-xs);
   }
 
   .mobileTopLink,
   .mobileActionsButton {
     min-height: 44px;
-    padding: var(--hm-space-xs) var(--hm-space-sm);
+    width: 100%;
+    justify-content: center;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: var(--hm-space-xs);
     border-radius: 999px;
     border: 0;
     background: transparent;
     font-family: var(--hm-font-body);
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     font-weight: 400;
     line-height: 1;
     cursor: pointer;
     color: var(--hm-color-text-muted);
+    white-space: nowrap;
+    text-align: center;
   }
 
   .mobileTopLinkActive {
@@ -114,6 +122,12 @@
 
   .mobileActions {
     position: relative;
+    min-width: 0;
+  }
+
+  .mobileActionsChevron {
+    font-size: 0.8em;
+    line-height: 1;
   }
 
   .mobileActionsMenu {

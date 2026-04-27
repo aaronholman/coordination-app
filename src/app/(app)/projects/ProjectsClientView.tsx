@@ -10,11 +10,14 @@ import { formatEnumLabel, getPlainTextPreview } from "@/lib/utils/formatting";
 import styles from "./ProjectsClientView.module.css";
 
 type ProjectFilter = "all" | ProjectStatus;
+const projectStatuses: ProjectStatus[] = ["not_started", "active", "inactive", "done", "archived"];
 
 const filterOptions: FilterOption<ProjectFilter>[] = [
   { value: "all", label: "All" },
+  { value: "not_started", label: formatEnumLabel("not_started") },
   { value: "active", label: formatEnumLabel("active") },
   { value: "inactive", label: formatEnumLabel("inactive") },
+  { value: "done", label: formatEnumLabel("done") },
   { value: "archived", label: formatEnumLabel("archived") },
 ];
 
@@ -23,6 +26,10 @@ interface ProjectsClientViewProps {
 }
 
 function statusClass(status: ProjectStatus) {
+  if (status === "not_started") {
+    return styles.statusDotNotStarted;
+  }
+
   if (status === "active") {
     return styles.statusDotActive;
   }
@@ -31,26 +38,45 @@ function statusClass(status: ProjectStatus) {
     return styles.statusDotInactive;
   }
 
+  if (status === "done") {
+    return styles.statusDotDone;
+  }
+
   return styles.statusDotArchived;
 }
 
 export function ProjectsClientView({ projects }: ProjectsClientViewProps) {
-  const [activeFilter, setActiveFilter] = useState<ProjectFilter>("all");
+  const [activeFilters, setActiveFilters] = useState<ProjectStatus[]>(["not_started", "active"]);
 
-  const filteredProjects = useMemo(() => {
-    if (activeFilter === "all") {
-      return projects;
+  function handleFilterToggle(value: ProjectFilter) {
+    if (value === "all") {
+      setActiveFilters(projectStatuses);
+      return;
     }
 
-    return projects.filter((project) => project.status === activeFilter);
-  }, [activeFilter, projects]);
+    setActiveFilters((current) => {
+      if (current.includes(value)) {
+        const next = current.filter((status) => status !== value);
+        return next.length > 0 ? next : ["not_started", "active"];
+      }
+      return [...current, value];
+    });
+  }
+
+  const filteredProjects = useMemo(() => {
+    return projects.filter((project) => activeFilters.includes(project.status));
+  }, [activeFilters, projects]);
 
   return (
     <section className={styles.section}>
       <FilterPills
         options={filterOptions}
-        activeValue={activeFilter}
-        onChange={setActiveFilter}
+        activeValues={
+          activeFilters.length === projectStatuses.length
+            ? (["all", ...projectStatuses] as ProjectFilter[])
+            : (activeFilters as ProjectFilter[])
+        }
+        onToggle={handleFilterToggle}
       />
 
       <div className={styles.grid}>

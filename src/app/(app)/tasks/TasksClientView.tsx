@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 
+import { FilterPills, type FilterOption } from "@/components/ui/FilterPills";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { DataTable, type DataTableColumn } from "@/components/tables/DataTable";
 import type {
@@ -19,7 +20,8 @@ import styles from "./TasksClientView.module.css";
 
 interface TaskRow extends Task {
   projectName: string;
-  assigneeName: string;
+  assigneeNames: string[];
+  assigneeLabel: string;
   completed: boolean;
 }
 
@@ -28,6 +30,17 @@ interface TasksClientViewProps {
   projects: Project[];
   profiles: Profile[];
 }
+
+type TaskFilter = "all" | TaskStatus;
+const taskStatuses: TaskStatus[] = ["not_started", "active", "inactive", "done", "archived"];
+const taskFilterOptions: FilterOption<TaskFilter>[] = [
+  { value: "all", label: "All" },
+  { value: "not_started", label: formatEnumLabel("not_started") },
+  { value: "active", label: formatEnumLabel("active") },
+  { value: "inactive", label: formatEnumLabel("inactive") },
+  { value: "done", label: formatEnumLabel("done") },
+  { value: "archived", label: formatEnumLabel("archived") },
+];
 
 function initials(name: string) {
   const parts = name.split(" ").filter(Boolean);
@@ -42,8 +55,10 @@ function formatDate(value: string | null) {
 }
 
 function statusClass(status: TaskStatus) {
+  if (status === "active") return styles.statusActive;
+  if (status === "inactive") return styles.statusInactive;
   if (status === "done") return styles.statusDone;
-  if (status === "in_progress") return styles.statusInProgress;
+  if (status === "archived") return styles.statusArchived;
   return styles.statusNotStarted;
 }
 
@@ -57,6 +72,25 @@ function priorityClass(priority: TaskPriority) {
 export function TasksClientView({ tasks, projects, profiles }: TasksClientViewProps) {
   const router = useRouter();
   const [search, setSearch] = useState("");
+  const [activeStatusFilters, setActiveStatusFilters] = useState<TaskStatus[]>([
+    "not_started",
+    "active",
+  ]);
+
+  function handleStatusFilterToggle(value: TaskFilter) {
+    if (value === "all") {
+      setActiveStatusFilters(taskStatuses);
+      return;
+    }
+
+    setActiveStatusFilters((current) => {
+      if (current.includes(value)) {
+        const next = current.filter((status) => status !== value);
+        return next.length > 0 ? next : ["not_started", "active"];
+      }
+      return [...current, value];
+    });
+  }
 
   const projectById = useMemo(
     () => new Map(projects.map((project) => [project.id, project] as const)),
@@ -72,13 +106,25 @@ export function TasksClientView({ tasks, projects, profiles }: TasksClientViewPr
       const projectName = task.project_id
         ? (projectById.get(task.project_id)?.name ?? "No project")
         : "No project";
-      const assignee = task.assignee_id ? profileById.get(task.assignee_id) : null;
-      const assigneeName = assignee?.display_name ?? assignee?.email ?? "Unassigned";
+      const selectedAssigneeIds =
+        task.assignee_ids && task.assignee_ids.length > 0
+          ? task.assignee_ids
+          : task.assignee_id
+            ? [task.assignee_id]
+            : [];
+      const assigneeNames = selectedAssigneeIds
+        .map((id) => {
+          const assignee = profileById.get(id);
+          return assignee?.display_name ?? assignee?.email ?? null;
+        })
+        .filter((value): value is string => Boolean(value));
+      const assigneeLabel = assigneeNames.length > 0 ? assigneeNames.join(", ") : "Unassigned";
 
       return {
         ...task,
         projectName,
-        assigneeName,
+        assigneeNames,
+        assigneeLabel,
         completed: task.status === "done",
       };
     });
@@ -86,9 +132,10 @@ export function TasksClientView({ tasks, projects, profiles }: TasksClientViewPr
 
   const filteredRows = useMemo(() => {
     const query = search.trim().toLowerCase();
-    if (!query) return taskRows;
-    return taskRows.filter((task) => task.title.toLowerCase().includes(query));
-  }, [search, taskRows]);
+    const statusFiltered = taskRows.filter((task) => activeStatusFilters.includes(task.status));
+    if (!query) return statusFiltered;
+    return statusFiltered.filter((task) => task.title.toLowerCase().includes(query));
+  }, [activeStatusFilters, search, taskRows]);
 
   const columns: DataTableColumn<TaskRow>[] = [
     {
@@ -131,13 +178,24 @@ export function TasksClientView({ tasks, projects, profiles }: TasksClientViewPr
     {
       key: "assignee",
       label: "Assignee",
-      getValue: (row) => row.assigneeName,
+      getValue: (row) => row.assigneeLabel,
+      getFilterValues: (row) => row.assigneeNames,
       sortable: true,
       filterable: true,
       render: (row) => (
         <span className={styles.avatarCell}>
-          <span className={styles.avatar}>{initials(row.assigneeName)}</span>
-          <span>{row.assigneeName}</span>
+          {row.assigneeNames.length > 0 ? (
+            <>
+              {row.assigneeNames.map((name) => (
+                <span key={name} className={styles.avatar}>
+                  {initials(name)}
+                </span>
+              ))}
+              <span>{row.assigneeLabel}</span>
+            </>
+          ) : (
+            <span>Unassigned</span>
+          )}
         </span>
       ),
     },
@@ -197,6 +255,16 @@ export function TasksClientView({ tasks, projects, profiles }: TasksClientViewPr
             </Link>
           </div>
         }
+      />
+
+      <FilterPills
+        options={taskFilterOptions}
+        activeValues={
+          activeStatusFilters.length === taskStatuses.length
+            ? (["all", ...taskStatuses] as TaskFilter[])
+            : (activeStatusFilters as TaskFilter[])
+        }
+        onToggle={handleStatusFilterToggle}
       />
 
       <DataTable

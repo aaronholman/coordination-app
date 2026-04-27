@@ -1,6 +1,6 @@
 export type ProfileRole = "owner" | "member";
-export type ProjectStatus = "active" | "inactive" | "archived";
-export type TaskStatus = "not_started" | "in_progress" | "done";
+export type ProjectStatus = "not_started" | "active" | "inactive" | "done" | "archived";
+export type TaskStatus = "not_started" | "active" | "inactive" | "done" | "archived";
 export type TaskPriority = "low" | "medium" | "high" | "urgent";
 export type DocumentCategory =
   | "legal"
@@ -67,6 +67,7 @@ export interface Task {
   status: TaskStatus;
   priority: TaskPriority;
   assignee_id: string | null;
+  assignee_ids: string[] | null;
   due_date: string | null;
   created_by: string;
   created_at: string;
@@ -275,6 +276,7 @@ export interface TaskInsert {
   status: TaskStatus;
   priority: TaskPriority;
   assignee_id: string | null;
+  assignee_ids?: string[] | null;
   due_date: string | null;
   created_by: string;
   created_at?: string;

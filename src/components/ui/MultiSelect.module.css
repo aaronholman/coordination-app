@@ -1,0 +1,80 @@
+.wrap {
+  position: relative;
+  width: 100%;
+}
+
+.trigger {
+  width: 100%;
+  min-height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--hm-space-sm);
+  border: 1px solid var(--hm-color-border);
+  border-radius: var(--hm-radius-md);
+  background: var(--hm-color-white);
+  color: var(--hm-color-forest);
+  font-family: var(--hm-font-body);
+  font-size: var(--hm-text-sm);
+  padding: 0 var(--hm-space-sm);
+  cursor: pointer;
+}
+
+.chevron {
+  color: var(--hm-color-text-muted);
+  font-size: var(--hm-text-xs);
+}
+
+.chips {
+  margin-top: var(--hm-space-xs);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--hm-space-xs);
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border-radius: var(--hm-radius-pill);
+  background: color-mix(in srgb, var(--hm-color-sage) 15%, transparent);
+  color: var(--hm-color-forest);
+  font-size: var(--hm-text-xs);
+  font-weight: var(--hm-weight-medium);
+  padding: 2px var(--hm-space-sm);
+}
+
+.chipRemove {
+  border: none;
+  background: transparent;
+  color: var(--hm-color-text-muted);
+  cursor: pointer;
+  font-size: var(--hm-text-xs);
+  padding: 0;
+}
+
+.menu {
+  position: absolute;
+  top: calc(100% + var(--hm-space-xs));
+  left: 0;
+  right: 0;
+  z-index: 30;
+  border: 1px solid var(--hm-color-border);
+  border-radius: var(--hm-radius-md);
+  background: var(--hm-color-white);
+  box-shadow: 0 8px 20px rgba(45, 58, 51, 0.08);
+  padding: var(--hm-space-xs);
+  display: flex;
+  flex-direction: column;
+  gap: var(--hm-space-xs);
+}
+
+.optionRow {
+  min-height: 36px;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--hm-space-sm);
+  color: var(--hm-color-forest);
+  font-size: var(--hm-text-sm);
+  padding: 0 var(--hm-space-xs);
+}
