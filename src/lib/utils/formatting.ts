@@ -25,15 +25,21 @@ export function getPlainTextPreview(content: string | null | undefined, maxLengt
   // Check if it's BlockNote JSON format
   if (trimmedContent.startsWith("[") && trimmedContent.endsWith("]")) {
     try {
-      const blocks = JSON.parse(trimmedContent);
+      type BlockContentItem = string | { text?: string };
+      type ParsedBlock = {
+        content?: BlockContentItem[] | string;
+        text?: string;
+      };
+
+      const blocks = JSON.parse(trimmedContent) as ParsedBlock[];
       if (Array.isArray(blocks)) {
         plainText = blocks
-          .map((block: any) => {
+          .map((block: ParsedBlock) => {
             if (block?.content) {
               // Handle paragraph, heading blocks with content array
               if (Array.isArray(block.content)) {
                 return block.content
-                  .map((contentItem: any) => {
+                  .map((contentItem: BlockContentItem) => {
                     if (typeof contentItem === "string") {
                       return contentItem;
                     }

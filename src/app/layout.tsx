@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { DM_Sans, DM_Serif_Display } from "next/font/google";
 
 import "./globals.css";
@@ -19,6 +19,12 @@ const dmSerifDisplay = DM_Serif_Display({
 export const metadata: Metadata = {
   title: "holmatrix",
   description: "Family coordination app",
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
 };
 
 export default function RootLayout({
