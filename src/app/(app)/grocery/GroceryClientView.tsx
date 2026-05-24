@@ -14,7 +14,7 @@ import type {
   Profile,
 } from "@/lib/types/database";
 import { formatEnumLabel } from "@/lib/utils/formatting";
-import { categorizeGroceryItem } from "@/lib/utils/grocery";
+import { categorizeGroceryItem, findSimilarItems } from "@/lib/utils/grocery";
 
 import styles from "./GroceryClientView.module.css";
 
@@ -118,6 +118,30 @@ export function GroceryClientView({
   const [noteDraft, setNoteDraft] = useState("");
   const [aisleDrafts, setAisleDrafts] = useState<Record<string, string>>({});
   const [savedAisleKey, setSavedAisleKey] = useState<string | null>(null);
+  const [suggestions, setSuggestions] = useState<GroceryItem[]>([]);
+  const [pendingAddName, setPendingAddName] = useState<string | null>(null);
+
+  // Fetch fresh data on mount to avoid stale server-rendered content
+  useEffect(() => {
+    async function refreshOnMount() {
+      const [{ data: freshListItems }, { data: freshGroceryItems }] = await Promise.all([
+        supabase
+          .from("grocery_list_items")
+          .select("*")
+          .eq("tenant_id", tenantId)
+          .order("created_at", { ascending: false })
+          .returns<GroceryListItem[]>(),
+        supabase
+          .from("grocery_items")
+          .select("*")
+          .eq("tenant_id", tenantId)
+          .returns<GroceryItem[]>(),
+      ]);
+      if (freshListItems) setListItems(freshListItems);
+      if (freshGroceryItems) setGroceryItems(freshGroceryItems);
+    }
+    void refreshOnMount();
+  }, [supabase, tenantId]);
 
   useEffect(() => {
     const channel = supabase
@@ -269,34 +293,14 @@ export function GroceryClientView({
     }
   }
 
-  async function handleQuickAdd() {
-    const name = quickAdd.trim();
-    if (!name) return;
-
-    let targetItem =
-      groceryItems.find((item) => item.name.toLowerCase() === name.toLowerCase()) ?? null;
-
-    if (!targetItem) {
-      const { data: createdItem } = await supabase
-        .from("grocery_items")
-        .insert({
-          tenant_id: tenantId,
-          name,
-          category: categorizeGroceryItem(name),
-        })
-        .select("*")
-        .single<GroceryItem>();
-
-      if (!createdItem) return;
-      targetItem = createdItem;
-      setGroceryItems((current) => [createdItem, ...current]);
-    }
-
+  async function addItemToList(targetItem: GroceryItem) {
     const existingListEntry = listItems.find(
-      (listItem) => listItem.item_id === targetItem!.id && !listItem.checked,
+      (listItem) => listItem.item_id === targetItem.id && !listItem.checked,
     );
     if (existingListEntry) {
       setQuickAdd("");
+      setSuggestions([]);
+      setPendingAddName(null);
       return;
     }
 
@@ -314,7 +318,55 @@ export function GroceryClientView({
     if (createdListItem) {
       setListItems((current) => [createdListItem, ...current]);
       setQuickAdd("");
+      setSuggestions([]);
+      setPendingAddName(null);
     }
+  }
+
+  async function createAndAddItem(name: string) {
+    const { data: createdItem } = await supabase
+      .from("grocery_items")
+      .insert({
+        tenant_id: tenantId,
+        name,
+        category: categorizeGroceryItem(name),
+      })
+      .select("*")
+      .single<GroceryItem>();
+
+    if (!createdItem) return;
+    setGroceryItems((current) => [createdItem, ...current]);
+    await addItemToList(createdItem);
+  }
+
+  async function handleQuickAdd() {
+    const name = quickAdd.trim();
+    if (!name) return;
+
+    // Exact match — use existing item directly
+    const exactMatch =
+      groceryItems.find((item) => item.name.toLowerCase() === name.toLowerCase()) ?? null;
+
+    if (exactMatch) {
+      await addItemToList(exactMatch);
+      return;
+    }
+
+    // Check for similar items before creating a new one
+    const similar = findSimilarItems(name, groceryItems);
+    if (similar.length > 0) {
+      setSuggestions(similar);
+      setPendingAddName(name);
+      return;
+    }
+
+    // No matches at all — create new item
+    await createAndAddItem(name);
+  }
+
+  function dismissSuggestions() {
+    setSuggestions([]);
+    setPendingAddName(null);
   }
 
   async function clearChecked() {
@@ -381,12 +433,46 @@ export function GroceryClientView({
           className={`hm-input ${styles.quickAddInput}`}
           placeholder="Add an item..."
           value={quickAdd}
-          onChange={(event) => setQuickAdd(event.target.value)}
+          onChange={(event) => {
+            const next = event.target.value;
+            setQuickAdd(next);
+            if (pendingAddName && next.trim().toLowerCase() !== pendingAddName.toLowerCase()) {
+              setSuggestions([]);
+              setPendingAddName(null);
+            }
+          }}
         />
         <button type="submit" className={`hm-btn-primary ${styles.quickAddButton}`}>
           +
         </button>
       </form>
+
+      {suggestions.length > 0 && pendingAddName ? (
+        <div className={styles.suggestionsPanel}>
+          <p className={styles.suggestionsPrompt}>
+            Did you mean one of these?
+          </p>
+          {suggestions.map((item) => (
+            <button
+              key={item.id}
+              type="button"
+              className={styles.suggestionButton}
+              onClick={() => void addItemToList(item)}
+            >
+              {item.name}
+            </button>
+          ))}
+          <button
+            type="button"
+            className={styles.suggestionNewButton}
+            onClick={() => {
+              void createAndAddItem(pendingAddName);
+            }}
+          >
+            Add &ldquo;{pendingAddName}&rdquo; as new item
+          </button>
+        </div>
+      ) : null}
 
       <div className={styles.list}>
         {groupedUnchecked.map((group) =>
