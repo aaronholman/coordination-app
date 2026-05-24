@@ -1,3 +1,5 @@
+import { redirect } from "next/navigation";
+
 export default function AppHomePage() {
-  return <h1>App</h1>;
+  redirect("/dashboard");
 }
