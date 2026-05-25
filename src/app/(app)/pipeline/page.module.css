@@ -1,0 +1,16 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--hm-space-md);
+}
+
+.newButton {
+  width: auto;
+  height: 32px;
+  padding: 0 var(--hm-space-md);
+}
+
+.emptyState {
+  color: var(--hm-color-text-muted);
+  font-size: var(--hm-text-sm);
+}

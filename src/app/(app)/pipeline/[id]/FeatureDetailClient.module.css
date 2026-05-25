@@ -1,0 +1,223 @@
+.page {
+  max-width: 820px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--hm-space-lg);
+}
+
+.backLink {
+  color: var(--hm-color-sage);
+  font-size: var(--hm-text-sm);
+  font-weight: var(--hm-weight-medium);
+  text-decoration: none;
+}
+
+.backLink:hover {
+  text-decoration: underline;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--hm-space-xs);
+}
+
+.titleRow {
+  display: flex;
+  align-items: center;
+  gap: var(--hm-space-sm);
+}
+
+.statusIndicator {
+  width: 12px;
+  height: 12px;
+  min-width: 12px;
+  border-radius: var(--hm-radius-pill);
+}
+
+.statusIdea {
+  background: var(--hm-color-info);
+}
+
+.statusSpeccing {
+  background: var(--hm-color-warning);
+}
+
+.statusBuilding {
+  background: var(--hm-color-purple-dark);
+}
+
+.statusDeployed {
+  background: var(--hm-color-sage);
+}
+
+.titleInput {
+  flex: 1;
+  border: none;
+  background: transparent;
+  color: var(--hm-color-forest);
+  font-family: var(--hm-font-heading);
+  font-size: var(--hm-text-2xl);
+  font-weight: var(--hm-weight-regular);
+  padding: 0;
+  outline: none;
+}
+
+.titleInput:focus {
+  border-bottom: 2px solid var(--hm-color-sage);
+}
+
+.metaCard {
+  padding: var(--hm-space-md);
+}
+
+.metaGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--hm-space-md);
+}
+
+.metaField {
+  display: flex;
+  flex-direction: column;
+  gap: var(--hm-space-xs);
+}
+
+.metaLabel {
+  color: var(--hm-color-text-muted);
+  font-size: var(--hm-text-xs);
+  font-weight: var(--hm-weight-medium);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.metaSelect {
+  width: 100%;
+  height: 36px;
+  border: 1px solid var(--hm-color-border);
+  border-radius: var(--hm-radius-md);
+  background: var(--hm-color-cream);
+  color: var(--hm-color-forest);
+  font-family: var(--hm-font-body);
+  font-size: var(--hm-text-sm);
+  padding: 0 var(--hm-space-xs);
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--hm-space-sm);
+}
+
+.sectionTitle {
+  color: var(--hm-color-forest);
+  font-family: var(--hm-font-heading);
+  font-size: var(--hm-text-lg);
+  font-weight: var(--hm-weight-regular);
+  display: flex;
+  align-items: center;
+  gap: var(--hm-space-sm);
+}
+
+.noteCount {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: var(--hm-radius-pill);
+  background: var(--hm-color-rose-light);
+  color: var(--hm-color-rose-dark);
+  font-family: var(--hm-font-body);
+  font-size: var(--hm-text-xs);
+  font-weight: var(--hm-weight-medium);
+}
+
+.editorCard {
+  padding: var(--hm-space-md);
+  min-height: 200px;
+}
+
+.notesList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--hm-space-sm);
+}
+
+.noteItem {
+  border-bottom: 0.5px solid var(--hm-color-border);
+  padding-bottom: var(--hm-space-sm);
+}
+
+.noteHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--hm-space-sm);
+  margin-bottom: var(--hm-space-xs);
+}
+
+.noteAvatar {
+  width: 24px;
+  height: 24px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--hm-radius-pill);
+  background: var(--hm-color-sage-light);
+  color: var(--hm-color-sage-dark);
+  font-size: var(--hm-text-xs);
+  font-weight: var(--hm-weight-medium);
+}
+
+.noteAuthor {
+  color: var(--hm-color-forest);
+  font-size: var(--hm-text-sm);
+  font-weight: var(--hm-weight-medium);
+}
+
+.noteTime {
+  color: var(--hm-color-text-muted);
+  font-size: var(--hm-text-xs);
+}
+
+.noteContent {
+  color: var(--hm-color-forest);
+  font-size: var(--hm-text-base);
+  line-height: 1.5;
+  white-space: pre-wrap;
+}
+
+.emptyNotes {
+  color: var(--hm-color-text-muted);
+  font-size: var(--hm-text-sm);
+  padding: var(--hm-space-md) 0;
+}
+
+.noteForm {
+  display: flex;
+  align-items: center;
+  gap: var(--hm-space-sm);
+  margin-top: var(--hm-space-xs);
+}
+
+.noteInput {
+  flex: 1;
+  height: 44px;
+}
+
+.noteSubmit {
+  width: auto;
+  height: 44px;
+  padding: 0 var(--hm-space-lg);
+}
+
+@media (max-width: 768px) {
+  .metaGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .titleInput {
+    font-size: var(--hm-text-xl);
+  }
+}

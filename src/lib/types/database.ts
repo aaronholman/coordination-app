@@ -26,6 +26,9 @@ export type GroceryCategory =
   | "other";
 export type RecommendationType = "show" | "movie" | "podcast" | "book";
 export type RecommendationStatus = "not_yet" | "watching" | "watched";
+export type FeatureStatus = "idea" | "speccing" | "building" | "deployed";
+export type FeatureComplexity = "small" | "medium" | "large";
+
 export type SharePermission = "view" | "edit" | "admin";
 
 export interface Tenant {
@@ -170,6 +173,29 @@ export interface Recommendation {
   added_by: string;
   created_at: string;
   updated_at: string;
+}
+
+export interface Feature {
+  id: string;
+  tenant_id: string;
+  title: string;
+  description: string | null;
+  status: FeatureStatus;
+  priority: TaskPriority;
+  target_module: string | null;
+  complexity: FeatureComplexity;
+  created_by: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface FeatureNote {
+  id: string;
+  tenant_id: string;
+  feature_id: string;
+  author_id: string;
+  content: string;
+  created_at: string;
 }
 
 export interface Share {
@@ -403,6 +429,33 @@ export interface RecommendationInsert {
 
 export type RecommendationUpdate = Partial<RecommendationInsert>;
 
+export interface FeatureInsert {
+  id?: string;
+  tenant_id: string;
+  title: string;
+  description: string | null;
+  status: FeatureStatus;
+  priority: TaskPriority;
+  target_module: string | null;
+  complexity: FeatureComplexity;
+  created_by: string;
+  created_at?: string;
+  updated_at?: string;
+}
+
+export type FeatureUpdate = Partial<FeatureInsert>;
+
+export interface FeatureNoteInsert {
+  id?: string;
+  tenant_id: string;
+  feature_id: string;
+  author_id: string;
+  content: string;
+  created_at?: string;
+}
+
+export type FeatureNoteUpdate = Partial<FeatureNoteInsert>;
+
 export interface ShareInsert {
   id?: string;
   tenant_id: string;
@@ -523,6 +576,8 @@ export type Database = {
         RecommendationInsert,
         RecommendationUpdate
       >;
+      features: TableDefinition<Feature, FeatureInsert, FeatureUpdate>;
+      feature_notes: TableDefinition<FeatureNote, FeatureNoteInsert, FeatureNoteUpdate>;
       shares: TableDefinition<Share, ShareInsert, ShareUpdate>;
       notifications: TableDefinition<
         Notification,
