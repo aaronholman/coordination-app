@@ -364,11 +364,6 @@ export function GroceryClientView({
     await createAndAddItem(name);
   }
 
-  function dismissSuggestions() {
-    setSuggestions([]);
-    setPendingAddName(null);
-  }
-
   async function clearChecked() {
     const checkedIds = checkedRows.map((row) => row.listItem.id);
     if (checkedIds.length === 0) return;
