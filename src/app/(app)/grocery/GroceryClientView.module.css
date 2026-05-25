@@ -43,6 +43,58 @@
   padding: 0;
 }
 
+.suggestionsPanel {
+  border: 1px solid var(--hm-color-sage);
+  border-radius: var(--hm-radius-md);
+  background: var(--hm-color-sage-light);
+  padding: var(--hm-space-sm);
+  display: flex;
+  flex-direction: column;
+  gap: var(--hm-space-xs);
+  animation: rowIn 200ms ease-out;
+}
+
+.suggestionsPrompt {
+  color: var(--hm-color-forest);
+  font-size: var(--hm-text-sm);
+  font-weight: var(--hm-weight-medium);
+  margin-bottom: var(--hm-space-xs);
+}
+
+.suggestionButton {
+  min-height: 44px;
+  border: 1px solid var(--hm-color-border);
+  border-radius: var(--hm-radius-md);
+  background: var(--hm-color-white);
+  color: var(--hm-color-forest);
+  font-size: var(--hm-text-base);
+  padding: var(--hm-space-xs) var(--hm-space-md);
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 150ms ease-out;
+}
+
+.suggestionButton:hover {
+  border-color: var(--hm-color-sage);
+}
+
+.suggestionNewButton {
+  min-height: 44px;
+  border: 1px dashed var(--hm-color-border-hover);
+  border-radius: var(--hm-radius-md);
+  background: transparent;
+  color: var(--hm-color-text-muted);
+  font-size: var(--hm-text-sm);
+  padding: var(--hm-space-xs) var(--hm-space-md);
+  text-align: left;
+  cursor: pointer;
+}
+
+.suggestionNewButton:hover {
+  border-color: var(--hm-color-sage);
+  color: var(--hm-color-forest);
+}
+
 .list {
   display: flex;
   flex-direction: column;
@@ -88,6 +140,16 @@
   align-items: center;
   gap: var(--hm-space-sm);
   flex: 1;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.mainTapRow input[type="checkbox"] {
+  width: 24px;
+  height: 24px;
+  min-width: 24px;
+  cursor: pointer;
+  accent-color: var(--hm-color-sage);
 }
 
 .itemName {
@@ -181,6 +243,16 @@
   align-items: center;
   gap: var(--hm-space-sm);
   animation: rowIn 200ms ease-out;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.checkedRow input[type="checkbox"] {
+  width: 24px;
+  height: 24px;
+  min-width: 24px;
+  cursor: pointer;
+  accent-color: var(--hm-color-sage);
 }
 
 .checkedName {

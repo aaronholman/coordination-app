@@ -23,7 +23,7 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(redirectUrl);
   }
 
-  if (isAuthenticated && pathname === "/login") {
+  if (isAuthenticated && (pathname === "/login" || pathname === "/")) {
     const redirectUrl = request.nextUrl.clone();
     redirectUrl.pathname = "/dashboard";
     return NextResponse.redirect(redirectUrl);
